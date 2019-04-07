@@ -1,6 +1,7 @@
 {
   "version": "0.0.1",
   "name": "dotup-node-app-installer",
+  "description": "Installer for node js applications. Install as app or service on linux.",
   "author": {
     "name": "Peter Ullrich",
     "email": "dotup.software@gmail.com"
