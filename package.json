@@ -1,6 +1,22 @@
 {
+  "version": "0.0.0",
+  "name": "dotup-node-app-installer",
+  "author": {
+    "name": "Peter Ullrich",
+    "email": "dotup.software@gmail.com"
+  },
   "main": "dist/app.js",
   "types": "dist/app.d.ts",
+  "bin": {
+    "noin": "dist/app.js"
+  },
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "commander": "^2.20.0",
+    "dotup-ts-git-wrapper": "^1.0.0",
+    "enquirer": "^2.3.0",
+    "shelljs": "^0.8.3"
+  },
   "devDependencies": {
     "dotup-ts-git-wrapper": "^1.0.0",
     "gulp": "^4.0.0",
@@ -38,11 +54,5 @@
     "docs": "typedoc --mode file --out docs src --exclude \"**/*+(index|.spec|.test|.e2e).ts\"",
     "gh-pages": "rimraf docs && npm run docs && gh-pages -d docs",
     "npm-publish": "npm publish"
-  },
-  "version": "0.0.0",
-  "name": "dotup-node-app-installer",
-  "author": {
-    "name": "Peter Ullrich",
-    "email": "dotup.software@gmail.com"
   }
 }

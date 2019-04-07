@@ -1,0 +1,12 @@
+{
+  "production": true,
+  "service": "serviceName",
+  "targetPath": "/home/pi/moto",
+  "git": {
+    "userName": "dotupNET",
+    "repositoryName": "motolaps-motobox"
+  },
+  "systemd":{
+    
+  }
+}

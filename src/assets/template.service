@@ -1,0 +1,22 @@
+[Unit]
+Description=MotoBoard device discovery
+After=network.target
+[Service]
+ExecStart=/var/moto/Server/Server.js
+Restart=always
+User=nobody
+# Use 'nogroup' group for Ubuntu/Debian
+# use 'nobody' group for Fedora
+Group=nogroup
+Environment=PATH=/usr/bin:/usr/local/bin
+Environment=NODE_ENV=production
+WorkingDirectory=/var/moto/Server
+[Install]
+WantedBy=multi-user.target
+
+# 1. chmod +x app.js
+# 2. Copy motobox.service file to /etc/systemd/system
+# 3. sudo systemctl daemon-reload
+# 4. sudo systemctl enable motobox
+# 5. sudo systemctl restart motobox
+# https://certsimple.com/blog/deploy-node-on-linux

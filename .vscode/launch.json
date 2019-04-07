@@ -9,12 +9,16 @@
       },
       "name": "Launch Program",
       "program": "${workspaceFolder}/dist/app.js",
+      "args": [
+        "-s", "WER"
+      ],
       "outFiles": [
         "${workspaceFolder}/dist/*.js"
       ],
       "skipFiles": [
         "<node_internals>/**/*.js"
-      ]
+      ],
+      "console": "integratedTerminal"
     },
     {
       "name": "Current TS File",

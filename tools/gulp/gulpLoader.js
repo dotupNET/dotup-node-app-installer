@@ -33,6 +33,15 @@ class GulpLoader {
     }
   }
 
+  getProcesses(processName) {
+    const procs = this.getProcess(processName);
+    if (procs.length > 0) {
+      return procs;
+    } else {
+      return undefined;
+    }
+  }
+
   task(name, taskFunction) {
     return gulp.task(name, taskFunction);
   }

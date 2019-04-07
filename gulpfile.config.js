@@ -24,6 +24,10 @@ class GulpConfig {
       {
         sourcePath: `${this.sourcePath}/assets/**`,
         targetPath: `${this.targetPath}/assets`
+      },
+      {
+        sourcePath: `${__dirname}/tools/**`,
+        targetPath: `${this.targetPath}/tools`
       }
     ];
   }
