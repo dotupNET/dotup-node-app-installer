@@ -25,3 +25,4 @@ gulpfile.config.js
 gulpfile.js
 .yo-rc-json
 .eslintrc.json
+.noin.json

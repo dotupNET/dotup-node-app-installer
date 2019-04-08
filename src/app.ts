@@ -76,7 +76,7 @@ export class App {
   }
 
   getConfig(args: Command): INoinConfig {
-    const configFile = path.join(this.currentDir, 'noin.json');
+    const configFile = path.join(this.currentDir, '.noin.json');
     if (fs.existsSync(configFile)) {
       this.logGrey(`Loading configurations from file ${configFile}`);
 
