@@ -4,9 +4,19 @@
   "targetPath": "/home/pi/moto",
   "git": {
     "userName": "dotupNET",
-    "repositoryName": "motolaps-motobox"
+    "repositoryName": "motolaps-device-discovery"
   },
-  "systemd":{
-    
+  "systemd": {
+    "Description": "MotoBoard device discovery",
+    "After": "network.target",
+    "Restart": "",
+    "User": "nobody",
+    "Group": "nogroup",
+    "Environment": [
+      "/usr/bin:/usr/local/bin",
+      "NODE_ENV=production"
+    ],
+    "WorkingDirectory": "/var/moto/Server",
+    "WantedBy": "multi-user.target"
   }
 }

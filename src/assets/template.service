@@ -1,18 +1,18 @@
 [Unit]
-Description=MotoBoard device discovery
-After=network.target
+Description=<%= Description %>
+After=<%= After %>
 [Service]
-ExecStart=/var/moto/Server/Server.js
-Restart=always
-User=nobody
+ExecStart=<%= ExecStart %>
+Restart=<%= Restart %>
+User=<%= User %>
 # Use 'nogroup' group for Ubuntu/Debian
 # use 'nobody' group for Fedora
-Group=nogroup
-Environment=PATH=/usr/bin:/usr/local/bin
-Environment=NODE_ENV=production
-WorkingDirectory=/var/moto/Server
+Group=<%= Group %>
+<% Environment.forEach(function(value){ %>
+<%- include('template.Environment.service', {value: value}); %><% }); %>
+WorkingDirectory=<%= WorkingDirectory %>
 [Install]
-WantedBy=multi-user.target
+WantedBy=<%= WantedBy %>
 
 # 1. chmod +x app.js
 # 2. Copy motobox.service file to /etc/systemd/system

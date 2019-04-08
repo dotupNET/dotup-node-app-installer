@@ -1,5 +1,5 @@
 {
-  "version": "0.0.3",
+  "version": "0.1.0",
   "name": "dotup-node-app-installer",
   "description": "Installer for node js applications. Install as app or service on linux.",
   "author": {
@@ -19,28 +19,32 @@
     "commander": "^2.20.0",
     "dotup-ts-git-wrapper": "^1.0.0",
     "enquirer": "^2.3.0",
-    "shelljs": "^0.8.3"
+    "shelljs": "^0.8.3",
+    "ejs": "^2.6.1",
+    "rimraf": "^2.6.3"
   },
   "devDependencies": {
-    "dotup-ts-git-wrapper": "^1.0.0",
-    "gulp": "^4.0.0",
-    "gulp-tslint": "^8.1.4",
-    "gulp-typescript": "^5.0.1",
-    "gulp-sourcemaps": "^2.6.5",
-    "gulp-gh-pages": "^0.5.4",
-    "gulp-typedoc": "^2.2.2",
-    "gulp-mocha": "^6.0.0",
-    "del": "^4.1.0",
     "@types/chai": "^4.1.7",
+    "@types/ejs": "^2.6.3",
     "@types/mocha": "^5.2.6",
+    "@types/rimraf": "^2.0.2",
     "chai": "^4.2.0",
+    "del": "^4.1.0",
+    "dotup-ts-git-wrapper": "^1.0.0",
+    "gh-pages": "^2.0.1",
+    "gulp": "^4.0.0",
+    "gulp-gh-pages": "^0.5.4",
+    "gulp-mocha": "^6.0.0",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-tslint": "^8.1.4",
+    "gulp-typedoc": "^2.2.2",
+    "gulp-typescript": "^5.0.1",
     "mocha": "^6.0.2",
     "ts-node": "^8.0.3",
-    "typedoc": "^0.14.2",
-    "typescript": "^3.4.2",
     "tslint": "^5.15.0",
     "tslint-microsoft-contrib": "^6.1.0",
-    "gh-pages": "^2.0.1"
+    "typedoc": "^0.14.2",
+    "typescript": "^3.4.2"
   },
   "repository": {
     "type": "git",
