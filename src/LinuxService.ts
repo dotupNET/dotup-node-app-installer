@@ -12,8 +12,9 @@ export class LinuxService {
   }
 
   install(config: INoinConfig, serviceFile: string): void {
-    const srcFile = path.join(shelly.getTempDir(), `${config.service}.service`);
-    const targetFile = `/etc/systemd/system/${config.service}.service`;
+    const serviceName = `${config.service}.service`;
+    const srcFile = path.join(shelly.getTempDir(), serviceName);
+    const targetFile = `/etc/systemd/system/${serviceName}`;
     const cmd = `sudo mv ${srcFile} ${targetFile}`;
 
     // Write to tmp
@@ -23,8 +24,8 @@ export class LinuxService {
     shelly.exec(cmd);
 
     shelly.exec('sudo systemctl daemon-reload');
-    shelly.exec('sudo systemctl enable motobox');
-    shelly.exec('sudo systemctl restart motobox');
+    shelly.exec(`sudo systemctl enable ${serviceName}`);
+    shelly.exec(`sudo systemctl restart ${serviceName}`);
   }
 
 }
