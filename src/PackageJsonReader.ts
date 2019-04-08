@@ -20,7 +20,7 @@ export class PackageJsonReader {
       if (typeof this.packageJson.bin === 'string') {
         bin = this.packageJson.bin;
       } else {
-        bin = Object.keys(this.packageJson.bin)[0];
+        bin = this.packageJson.bin[Object.keys(this.packageJson.bin)[0]];
       }
     }
 

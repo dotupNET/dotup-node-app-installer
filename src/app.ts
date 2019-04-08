@@ -48,6 +48,7 @@ export class App extends Configurator {
     // Load config from repository
     this.loadConfig(this.repositoryDir);
 
+    this.config.targetPath = 'C:/temp/taeget/moto';
     // Install dependencies and Build project
     this.build();
 
@@ -104,7 +105,7 @@ export class App extends Configurator {
     // copy to target
 
     shelly.echoGrey('Copy binaries to target');
-    let source = preader.getPathToExec(this.repositoryDir);
+    let source = path.join(preader.getPathToExec(this.repositoryDir));
     shelly.echoGrey(`Source '${source}'`);
     shelly.echoGrey(`Target '${this.config.targetPath}'`);
     shelly.cp(source, this.config.targetPath);
