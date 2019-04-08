@@ -29,7 +29,7 @@ export class App extends Configurator {
       .parse(process.argv);
 
     this.rootDir = shelly.pwd().toString();
-    this.noinDir = shelly.which('noin');
+    this.noinDir = shelly.which('noin').toString();
 
     // Get configuration
     this.loadConfig(this.rootDir, <any>args);
