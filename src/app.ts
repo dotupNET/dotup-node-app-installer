@@ -128,7 +128,7 @@ export class App extends Configurator {
     }
 
     const service = await this.getLinuxService();
-    const template = path.join(this.rootDir, 'dist', 'assets', 'template.service');
+    const template = path.join(this.rootDir, 'assets', 'template.service');
 
     // Generate service file
     const ls = new LinuxService();
