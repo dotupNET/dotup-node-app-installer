@@ -40,7 +40,7 @@ export class App extends Configurator {
     this.repositoryDir = path.join(shelly.getTempDir(), this.config.git.repositoryName);
 
     // Clone repository. Should override if exists?
-    this.clone();
+    await this.clone();
 
     // Load config from repository
     this.loadConfig(this.repositoryDir);
@@ -52,7 +52,7 @@ export class App extends Configurator {
     const preader = new PackageJsonReader(this.repositoryDir);
 
     // Copy project to target and install dependencies
-    this.createTarget(preader);
+    await this.createTarget(preader);
 
     // Clean up
     rimraf.sync(this.repositoryDir);
