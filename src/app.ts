@@ -105,6 +105,8 @@ export class App extends Configurator {
 
     shelly.echoGrey('Copy binaries to target');
     let source = preader.getPathToExec(this.repositoryDir);
+    shelly.echoGrey(`Source '${source}'`);
+    shelly.echoGrey(`Target '${this.config.targetPath}'`);
     shelly.cp(source, this.config.targetPath);
 
     source = path.join(this.repositoryDir, 'package.json');
@@ -138,7 +140,7 @@ export class App extends Configurator {
     const serviceFile = await ls.generateFile(template, service);
 
     // Install
-    shelly.echoGrey(`Installing linux service ${this.config.service}''`);
+    shelly.echoGrey(`Installing linux service '${this.config.service}'`);
     ls.install(this.config, serviceFile);
 
     shelly.echoGreen('Installation completed');
