@@ -70,6 +70,7 @@ export class App extends Configurator {
     // Clone repository. Should override if exists?
     const canClone = await this.canClone();
     if (canClone) {
+      shelly.mkdir(this.repositoryDir);
       // cd into temp
       shelly.cdTemp();
 

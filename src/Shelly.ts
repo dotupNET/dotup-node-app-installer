@@ -21,6 +21,10 @@ export namespace shelly {
     return run(shell.rm('-rf', dir));
   }
 
+  export function mkdir(dir: string): ShellString {
+    return run(shell.mkdir('-p', dir));
+  }
+
   export function cp(source: string, target: string): ShellString {
     run(shell.mkdir('-p', target));
     return run(shell.cp('-R', source, target));
