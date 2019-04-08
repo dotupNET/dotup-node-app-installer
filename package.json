@@ -1,5 +1,5 @@
 {
-  "version": "0.1.2",
+  "version": "0.1.3",
   "name": "dotup-node-app-installer",
   "description": "Installer for node js applications. Install as app or service on linux.",
   "author": {
@@ -21,7 +21,8 @@
     "enquirer": "^2.3.0",
     "shelljs": "^0.8.3",
     "ejs": "^2.6.1",
-    "rimraf": "^2.6.3"
+    "rimraf": "^2.6.3",
+    "lodash": "^4.17.11"
   },
   "devDependencies": {
     "@types/chai": "^4.1.7",
