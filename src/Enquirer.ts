@@ -3,7 +3,7 @@ import { INoinArguments } from './INoinArguments';
 import { InstallMode } from './Enumerations';
 import { IGitConfig } from './INoinConfig';
 import { ILinuxService } from './ILinuxService';
-import _ from 'lodash';
+import * as _ from 'lodash';
 
 export namespace Enquirer {
 
