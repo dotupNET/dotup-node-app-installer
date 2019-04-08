@@ -101,11 +101,12 @@ export class App extends Configurator {
     // copy to target
     const target = preader.getPathToExec(this.config.targetPath);
 
+    shelly.echoGrey('Copy binaries to target');
     let source = preader.getPathToExec(this.repositoryDir);
     shelly.cp(source, target);
 
     source = path.join(this.repositoryDir, 'package.json');
-    shelly.cp(source, target);
+    shelly.cp(source, path.join(target, 'package.json'));
 
     // cd into target path
     shelly.cd(this.config.targetPath);
