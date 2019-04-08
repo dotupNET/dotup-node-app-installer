@@ -118,8 +118,13 @@ export class App extends Configurator {
 
   async installService(preader: PackageJsonReader): Promise<void> {
 
-    this.config.systemd.ExecStart = preader.getBin(this.config.targetPath);
-    this.config.systemd.WorkingDirectory = preader.getPathToExec(this.config.targetPath);
+    if (
+      this.config.systemd.ExecStart === undefined ||
+      this.config.systemd.WorkingDirectory === undefined
+    ) {
+      this.config.systemd.ExecStart = preader.getBin(this.config.targetPath);
+      this.config.systemd.WorkingDirectory = preader.getPathToExec(this.config.targetPath);
+    }
 
     const service = await this.getLinuxService();
     const t = path.join(this.rootDir, 'dist', 'assets', 'template.service');
