@@ -99,11 +99,10 @@ export class App extends Configurator {
 
   async createTarget(preader: PackageJsonReader): Promise<void> {
     // copy to target
-    const target = preader.getPathToExec(this.config.targetPath);
 
     shelly.echoGrey('Copy binaries to target');
     let source = preader.getPathToExec(this.repositoryDir);
-    shelly.cp(source, target);
+    shelly.cp(source, this.config.targetPath);
 
     source = path.join(this.repositoryDir, 'package.json');
     shelly.cp(source, this.config.targetPath);
