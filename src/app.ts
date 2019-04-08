@@ -78,7 +78,7 @@ export class App extends Configurator {
       shelly.cdTemp();
 
       // Clone repository
-      shelly.echoGrey(`Cloning ${this.config.git.url}`);
+      shelly.echoGreen(`Cloning ${this.config.git.url}`);
       shelly.exec(`git clone --depth 1 ${this.config.git.url}`);
     } else {
       shelly.echoRed(`Repository folder '${this.repositoryDir}' already exists`);
@@ -92,18 +92,18 @@ export class App extends Configurator {
     shelly.cd(this.repositoryDir);
 
     // Install packages
-    shelly.echoGrey('Installing dependencies');
+    shelly.echoGreen('Installing dependencies');
     shelly.exec(`npm install`);
 
     // Build project
-    shelly.echoGrey('Building project');
+    shelly.echoGreen('Building project');
     shelly.exec(`gulp project-build`);
   }
 
   async createTarget(preader: PackageJsonReader): Promise<void> {
     // copy to target
 
-    shelly.echoGrey('Copy binaries to target');
+    shelly.echoGreen('Copy binaries to target');
     let source = path.join(preader.getPathToExec(this.repositoryDir));
     shelly.echoGrey(`Source '${source}'`);
     shelly.echoGrey(`Target '${this.config.targetPath}'`);
@@ -118,7 +118,7 @@ export class App extends Configurator {
     // Install packages
     const isProduction = await this.getIsProduction();
     const installProd = isProduction ? '--production' : '';
-    shelly.echoGrey('Installing dependencies');
+    shelly.echoGreen('Installing dependencies');
     shelly.exec(`npm install ${installProd}`);
   }
 
@@ -140,7 +140,7 @@ export class App extends Configurator {
     const serviceFile = await ls.generateFile(template, service);
 
     // Install
-    shelly.echoGrey(`Installing linux service '${this.config.service}'`);
+    shelly.echoGreen(`Installing linux service '${this.config.service}'`);
     ls.install(this.config, serviceFile);
 
     shelly.echoGreen('Installation completed');
