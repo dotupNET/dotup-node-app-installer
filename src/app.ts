@@ -48,7 +48,6 @@ export class App extends Configurator {
     // Load config from repository
     this.loadConfig(this.repositoryDir);
 
-    this.config.targetPath = 'C:/temp/taeget/moto';
     // Install dependencies and Build project
     this.build();
 
