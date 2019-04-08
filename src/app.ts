@@ -106,7 +106,7 @@ export class App extends Configurator {
     shelly.cp(source, target);
 
     source = path.join(this.repositoryDir, 'package.json');
-    shelly.cp(source, path.join(target, 'package.json'));
+    shelly.cp(source, this.config.targetPath);
 
     // cd into target path
     shelly.cd(this.config.targetPath);
