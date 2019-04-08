@@ -58,10 +58,10 @@ export class App extends Configurator {
     rimraf.sync(this.repositoryDir);
 
     // Install service
-    // const mode = await this.getInstallMode();
-    // if (mode === InstallMode.service) {
-    //   await this.installService(preader);
-    // }
+    const mode = await this.getInstallMode();
+    if (mode === InstallMode.service) {
+      await this.installService(preader);
+    }
 
   }
 
