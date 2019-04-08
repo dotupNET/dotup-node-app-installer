@@ -29,7 +29,7 @@ export class App extends Configurator {
       .parse(process.argv);
 
     this.rootDir = shelly.pwd().toString();
-    this.noinDir = path.join(shelly.exec('npm root -g').toString(), 'dotup-node-app-installer');
+    this.noinDir = path.join(shelly.exec('npm root -g').toString(), 'dotup-node-app-installer', 'dist');
 
     // Get configuration
     this.loadConfig(this.rootDir, <any>args);
