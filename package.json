@@ -1,5 +1,5 @@
 {
-  "version": "0.0.1",
+  "version": "0.0.2",
   "name": "dotup-node-app-installer",
   "description": "Installer for node js applications. Install as app or service on linux.",
   "author": {
@@ -10,6 +10,9 @@
   "types": "dist/app.d.ts",
   "bin": {
     "noin": "dist/app.js"
+  },
+  "engines": {
+    "node": ">= 0.10"
   },
   "dependencies": {
     "chalk": "^2.4.2",
