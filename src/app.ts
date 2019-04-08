@@ -11,6 +11,7 @@ import rimraf = require('rimraf');
 
 export class App extends Configurator {
 
+  readonly noinDir: string;
   readonly rootDir: string;
   repositoryDir: string;
 
@@ -28,6 +29,7 @@ export class App extends Configurator {
       .parse(process.argv);
 
     this.rootDir = shelly.pwd().toString();
+    this.noinDir = shelly.which('noin');
 
     // Get configuration
     this.loadConfig(this.rootDir, <any>args);
@@ -128,7 +130,7 @@ export class App extends Configurator {
     }
 
     const service = await this.getLinuxService();
-    const template = path.join(this.rootDir, 'assets', 'template.service');
+    const template = path.join(this.noinDir, 'assets', 'template.service');
 
     // Generate service file
     const ls = new LinuxService();

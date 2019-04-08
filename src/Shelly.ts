@@ -13,6 +13,11 @@ export namespace shelly {
     return cd(shell.tempdir().toString());
   }
 
+  export function which(command: string): ShellString {
+    // Go to temp
+    return run(shell.which(command));
+  }
+
   export function getTempDir(): string {
     return shell.tempdir().toString();
   }
