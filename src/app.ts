@@ -127,16 +127,17 @@ export class App extends Configurator {
     }
 
     const service = await this.getLinuxService();
-    const t = path.join(this.rootDir, 'dist', 'assets', 'template.service');
+    const template = path.join(this.rootDir, 'dist', 'assets', 'template.service');
 
+    // Generate service file
     const ls = new LinuxService();
-    const serviceFile = await ls.generateFile(t, service);
+    const serviceFile = await ls.generateFile(template, service);
 
-    console.log(serviceFile);
+    // Install
+    shelly.echoGrey(`Installing linux service ${this.config.service}''`);
+    ls.install(this.config, serviceFile);
 
-    shelly.exec('sudo systemctl daemon-reload');
-    shelly.exec('sudo systemctl enable motobox');
-    shelly.exec('sudo systemctl restart motobox');
+    shelly.echoGreen('Installation completed');
 
   }
   //   // Create temp and target path
