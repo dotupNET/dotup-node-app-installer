@@ -1,8 +1,8 @@
 import enquirer from 'enquirer';
-import { INoinArguments } from './INoinArguments';
+import { INoinArguments } from './interfaces/INoinArguments';
 import { InstallMode } from './Enumerations';
-import { IGitConfig } from './INoinConfig';
-import { ILinuxService } from './ILinuxService';
+import { IGitConfig } from './interfaces/IGitConfig';
+import { ILinuxService } from './interfaces/ILinuxService';
 import * as _ from 'lodash';
 
 export namespace Enquirer {

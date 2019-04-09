@@ -8,6 +8,7 @@ import { LinuxService } from './LinuxService';
 import { PackageJsonReader } from './PackageJsonReader';
 import { shelly } from './Shelly';
 import rimraf = require('rimraf');
+import { PostCommands } from './PostCommands';
 
 export class App extends Configurator {
 
@@ -17,6 +18,11 @@ export class App extends Configurator {
 
   constructor() {
     super();
+
+
+    /*
+    TODO: sudo ln -s /home/pi/moto/motobox/dist/app.js /usr/bin/motobox
+     */
 
     const args = commander
       .option('-a, --app', 'Install as application', false)
@@ -34,6 +40,9 @@ export class App extends Configurator {
 
     // Get configuration
     this.loadConfig(this.rootDir, <any>args);
+
+    const commands = new PostCommands(this.config);
+    commands.execute();
   }
 
   async install(): Promise<void> {
@@ -66,6 +75,7 @@ export class App extends Configurator {
       await this.installService(preader);
     }
 
+    // Post commands
   }
 
 

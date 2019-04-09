@@ -1,4 +1,5 @@
 import { ILinuxService } from './ILinuxService';
+import { IGitConfig } from './IGitConfig';
 
 export interface INoinConfig {
   app: boolean;
@@ -8,10 +9,5 @@ export interface INoinConfig {
   git: IGitConfig;
   override: boolean;
   systemd: ILinuxService;
-}
-
-export interface IGitConfig {
-  url: string;
-  userName: string;
-  repositoryName: string
+  postCommands: string[];
 }

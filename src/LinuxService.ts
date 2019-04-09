@@ -1,7 +1,7 @@
 import { renderFile } from 'ejs';
-import { ILinuxService } from './ILinuxService';
+import { ILinuxService } from './interfaces/ILinuxService';
 import { shelly } from './Shelly';
-import { INoinConfig } from './INoinConfig';
+import { INoinConfig } from './interfaces/INoinConfig';
 import fs from 'fs';
 import path from 'path';
 

@@ -2,10 +2,11 @@ import fs from 'fs';
 import path from 'path';
 import { Enquirer } from './Enquirer';
 import { InstallMode } from './Enumerations';
-import { INoinArguments } from './INoinArguments';
-import { IGitConfig, INoinConfig } from './INoinConfig';
+import { INoinArguments } from './interfaces/INoinArguments';
+import { INoinConfig } from './interfaces/INoinConfig';
+import { IGitConfig } from './interfaces/IGitConfig';
 import { shelly } from './Shelly';
-import { ILinuxService } from './ILinuxService';
+import { ILinuxService } from './interfaces/ILinuxService';
 import rimraf from 'rimraf';
 
 export class Configurator {
@@ -35,7 +36,8 @@ export class Configurator {
           repositoryName: args.repositoryName,
           userName: args.userName,
           url: ''
-        }
+        },
+        postCommands: []
       };
     }
 

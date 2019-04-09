@@ -18,5 +18,11 @@
     ],
     "WorkingDirectory": "/var/moto/Server",
     "WantedBy": "multi-user.target"
-  }
+  },
+  "postCommands": [
+    "sudo ln -s /home/pi/moto/motobox/dist/app.js /usr/bin/motobox",
+    "sudo systemctl daemon-reload",
+    "sudo systemctl enable {service}",
+    "sudo systemctl restart {service}"
+  ]
 }

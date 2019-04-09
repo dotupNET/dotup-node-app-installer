@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { IPackageJSON } from './IPackageJSON';
+import { IPackageJSON } from './interfaces/IPackageJSON';
 
 export class PackageJsonReader {
 
