@@ -1,79 +1,37 @@
 import fs from 'fs';
-import os from 'os';
 import path from 'path';
 import rimraf from 'rimraf';
+import { ConfigManager } from './ConfigManager';
 import { Enquirer } from './Enquirer';
 import { InstallMode } from './Enumerations';
 import { IGitConfig } from './interfaces/IGitConfig';
+import { ILinuxConfig } from './interfaces/ILinuxConfig';
 import { ILinuxService } from './interfaces/ILinuxService';
 import { ILinuxServiceConfig } from './interfaces/ILinuxServiceConfig';
-import { INoinArguments } from './interfaces/INoinArguments';
 import { INoinConfig } from './interfaces/INoinConfig';
-import { IRuntimeConfig } from './interfaces/IRuntimeConfig';
 import { shelly } from './Shelly';
-import { IWindowsConfig } from './interfaces/IWindowsConfig';
-import { ILinuxConfig } from './interfaces/ILinuxConfig';
-import { ITypedProperty } from 'dotup-ts-types';
-import { IPlatformConfig } from './interfaces/IPlatformConfig';
+import { INoinArguments } from './interfaces/INoinArguments';
 
 export class Configurator {
 
-  config: INoinConfig;
+  cm: ConfigManager;
+  get config(): INoinConfig {
+    return this.cm.config;
+  }
 
-  loadConfig(dir: string, args?: Partial<INoinArguments>): INoinConfig {
-    const configFile = path.join(dir, '.noin.json');
-
-    if (fs.existsSync(configFile)) {
-      // Config from file
-      shelly.echoGrey(`Loading configuration from file ${configFile}`);
-      const fileConfig = <INoinConfig>JSON.parse((fs.readFileSync(configFile, 'utf8')));
-      this.config = fileConfig;
-
-    } else if (args === undefined) {
-      // No configuration
-      shelly.echoYellow(`No configuration provided`);
-      args = <INoinArguments>{};
-
-    } else {
-      // Config from args
-      shelly.echoGrey(`Loading configuration from arguments`);
-      this.config = {
-        production: args.production,
-        override: args.override,
-        git: {
-          repositoryName: args.repositoryName,
-          userName: args.userName,
-          url: ''
-        },
-        postCommands: [],
-        linux: os.platform() === 'linux' ? <ILinuxConfig>{} : undefined,
-        win32: os.platform() === 'win32' ? <IWindowsConfig>{} : undefined
-      };
-
-      if (args.app !== undefined) {
-        this.setAppConfig(args.targetPath);
-      } else {
-        if (args.service !== undefined) {
-          this.config.linux.systemd = <ILinuxServiceConfig>{};
-          this.config.linux.systemd.WorkingDirectory = args.targetPath;
-        }
-      }
-
-      return this.config;
-    }
+  loadConfig(dir: string, args?: Partial<INoinArguments>) {
+    this.cm = new ConfigManager();
+    this.cm.loadConfig(dir, args);
   }
 
   async getInstallMode(): Promise<InstallMode> {
-    const runtime = this.getPlatformConfig<ILinuxConfig>();
-    if (runtime.app !== undefined && runtime.systemd === undefined) {
-      return InstallMode.app;
-    }
+    const runtime = this.cm.getPlatformConfig<ILinuxConfig>();
 
-    if (runtime.systemd !== undefined && runtime.app === undefined) {
-      return InstallMode.service;
-    }
+    let mode = this.cm.getInstallMode();
 
-    const mode = await Enquirer.getInstallMode();
+    if (mode === undefined) {
+      mode = await Enquirer.getInstallMode();
+    }
 
     if (mode === InstallMode.service) {
       // service
@@ -85,14 +43,15 @@ export class Configurator {
     } else {
       // app
       const workingDirectory = await Enquirer.getWorkingDirectory();
-      this.setAppConfig(workingDirectory);
+      this.cm.setAppConfig(workingDirectory);
     }
 
     return mode;
   }
 
   async getIsProduction(): Promise<boolean> {
-    if (this.config.production === undefined) {
+    const result = this.cm.getIsProduction();
+    if (result === undefined) {
       this.config.production = await Enquirer.getIsProduction();
     }
 
@@ -110,14 +69,8 @@ export class Configurator {
   }
 
   async getLinuxService(): Promise<ILinuxService> {
-    const config = this.getServiceConfig();
+    const config = this.cm.getServiceConfig();
     this.config.linux.systemd = await Enquirer.getLinuxService(config);
-
-    return this.config.linux.systemd;
-  }
-
-  getServiceConfig(): ILinuxServiceConfig {
-    if (this.config.linux === undefined) { return undefined; }
 
     return this.config.linux.systemd;
   }
@@ -135,52 +88,6 @@ export class Configurator {
     }
 
     return false;
-  }
-
-  canInstallService(mode: InstallMode): boolean {
-    if (mode === InstallMode.service) {
-      if (os.platform() === 'linux') {
-        return true;
-      } else {
-        shelly.echoYellow(`Service installation not support on platform '${os.platform()}'`);
-      }
-    }
-
-    return false;
-  }
-
-  private setAppConfig(targetPath: string): void {
-    const runtimeConfig: Partial<IPlatformConfig> = {
-      targetPath: targetPath
-    };
-
-    if (os.platform() === 'win32') {
-      this.config.win32 = <IWindowsConfig>{};
-      this.config.win32.app = <IRuntimeConfig>runtimeConfig;
-    } else if (os.platform() === 'linux') {
-      this.config.linux = <ILinuxConfig>{};
-      this.config.linux.app = <IRuntimeConfig>runtimeConfig;
-    } else {
-      throw new Error(`Platform '${os.platform()}' not supported`);
-    }
-  }
-
-  getRuntimeConfig(mode: InstallMode): IRuntimeConfig {
-    if (mode === InstallMode.app) {
-      return this.getPlatformConfig<IPlatformConfig>().app;
-    } else {
-      return this.config.linux.systemd;
-    }
-  }
-
-  getPlatformConfig<T extends IPlatformConfig>(): T {
-    const result = (<any>this.config)[os.platform()];
-
-    if (result === undefined) {
-      throw new Error(`Platform '${result}' not configured`);
-    }
-
-    return result;
   }
 
 }

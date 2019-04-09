@@ -24,20 +24,20 @@
         "PATH=/usr/bin:/usr/local/bin",
         "NODE_ENV=production"
       ],
-      "WantedBy": "multi-user.target"
-    },
-    "win32": {
-      "targetPath": "C:/dotup/moto/discovery",
-      "app": {
-        "Environment": [
-          "NODE_ENV=production"
-        ]
-      }
+      "WantedBy": "multi-user.target",
+      "postCommands": [
+        "sudo systemctl daemon-reload",
+        "sudo systemctl enable {linux.systemd.serviceName}",
+        "sudo systemctl restart {linux.systemd.serviceName}"
+      ]
     }
   },
-  "postCommands": [
-    "sudo systemctl daemon-reload",
-    "sudo systemctl enable {service}",
-    "sudo systemctl restart {service}"
-  ]
+  "win32": {
+    "targetPath": "C:/dotup/moto/discovery",
+    "app": {
+      "Environment": [
+        "NODE_ENV=production"
+      ]
+    }
+  }
 }

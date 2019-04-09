@@ -74,7 +74,7 @@ export class App extends Configurator {
     await this.createTarget(preader, mode);
 
     // Install service
-    if (this.canInstallService(mode)) {
+    if (this.cm.canInstallService(mode)) {
       await this.installService(preader);
     }
 
@@ -82,7 +82,7 @@ export class App extends Configurator {
     rimraf.sync(this.repositoryDir);
 
     // Post commands
-    const commands = new PostCommands(this.config);
+    const commands = new PostCommands(this.cm);
     commands.execute();
 
     // Done
@@ -123,7 +123,7 @@ export class App extends Configurator {
   async createTarget(preader: PackageJsonReader, mode: InstallMode): Promise<void> {
     // copy to target
 
-    const runtimeConfig = this.getPlatformConfig();
+    const runtimeConfig = this.cm.getPlatformConfig();
 
     shelly.echoGreen('Copy binaries to target');
     let source = path.join(preader.getPathToExec(this.repositoryDir));
@@ -146,7 +146,7 @@ export class App extends Configurator {
 
   async installService(preader: PackageJsonReader): Promise<void> {
 
-    const serviceConfig = this.getServiceConfig();
+    const serviceConfig = this.cm.getServiceConfig();
 
     const serviceName = serviceConfig.serviceName;
     const targetPath = serviceConfig.WorkingDirectory;

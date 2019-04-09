@@ -7,6 +7,5 @@ export interface INoinConfig {
   git: IGitConfig;
   linux: ILinuxConfig;
   win32: IWindowsConfig;
-  postCommands: string[];
   override: boolean;
 }
