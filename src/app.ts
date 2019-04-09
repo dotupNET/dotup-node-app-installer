@@ -56,13 +56,13 @@ export class App extends Configurator {
     this.repositoryDir = path.join(shelly.getTempDir(), this.config.git.repositoryName);
 
     // Clone repository. Should override if exists?
-    await this.clone();
+   await this.clone();
 
     // Load config from repository
     this.loadConfig(this.repositoryDir);
 
     // Install dependencies and Build project
-    this.build();
+   this.build();
 
     // Load cloned project package json
     const preader = new PackageJsonReader(this.repositoryDir);

@@ -76,7 +76,7 @@ export class ConfigManager {
 
   getServiceConfig(): ILinuxServiceConfig {
     if (this.config.linux === undefined) { return undefined; }
-
+    // this.config.linux.systemd.WorkingDirectory = this.config.linux.targetPath;
     return this.config.linux.systemd;
   }
 

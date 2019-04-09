@@ -36,25 +36,14 @@ export namespace Enquirer {
 
   }
 
-  export async function getServiceName(defaultValue?: string): Promise<string> {
-    const result = await enquirer.prompt<INoinArguments>({
-      type: 'input',
-      name: 'service',
-      required: true,
-      message: 'Enter service name.',
-      initial: defaultValue
-    });
-
-    return result.service;
-  }
-
-  export async function getWorkingDirectory(defaultValue?: string): Promise<string> {
+  export async function getTargetPath(defaultValue?: string): Promise<string> {
     const answer = await enquirer.prompt<IPlatformConfig>({
       type: 'input',
       name: 'targetPath',
       message: 'Target directory',
       initial: defaultValue === undefined ? '' : defaultValue,
-      required: true
+      required: true,
+      skip: defaultValue !== undefined
     });
 
     return answer.targetPath;

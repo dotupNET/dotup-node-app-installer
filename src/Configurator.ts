@@ -36,14 +36,16 @@ export class Configurator {
     if (mode === InstallMode.service) {
       // service
       if (runtime.systemd === undefined) {
-        const name = await Enquirer.getServiceName();
+        // const name = await Enquirer.getServiceName();
         runtime.systemd = <ILinuxServiceConfig>{};
-        runtime.systemd.serviceName = name;
+        // runtime.systemd.serviceName = name;
       }
     } else {
       // app
-      const workingDirectory = await Enquirer.getWorkingDirectory();
-      this.cm.setAppConfig(workingDirectory);
+      if (runtime.app === undefined) {
+        const targetPath = await Enquirer.getTargetPath(runtime.targetPath);
+        this.cm.setAppConfig(targetPath);
+      }
     }
 
     return mode;
