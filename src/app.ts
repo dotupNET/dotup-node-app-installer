@@ -149,10 +149,11 @@ export class App extends Configurator {
 
   async installService(preader: PackageJsonReader): Promise<void> {
 
+    const runtimeConfig = this.cm.getPlatformConfig();
     const serviceConfig = this.cm.getServiceConfig();
 
     const serviceName = serviceConfig.serviceName;
-    const targetPath = serviceConfig.WorkingDirectory;
+    const targetPath = runtimeConfig.targetPath;
 
     if (
       serviceConfig.ExecStart === undefined ||

@@ -114,6 +114,7 @@ export namespace Enquirer {
       type: 'input',
       name: 'serviceName',
       message: 'Service name',
+      initial: config.serviceName === undefined ? '': config.serviceName,
       required: true,
       skip: config.serviceName !== undefined
     });
