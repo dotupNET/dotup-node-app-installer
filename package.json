@@ -1,5 +1,5 @@
 {
-  "version": "0.3.3",
+  "version": "0.3.4",
   "name": "dotup-node-app-installer",
   "description": "Installer for node js applications. Install as app or service on linux.",
   "author": {
