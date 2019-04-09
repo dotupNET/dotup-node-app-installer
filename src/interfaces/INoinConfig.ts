@@ -1,13 +1,12 @@
-import { ILinuxService } from './ILinuxService';
 import { IGitConfig } from './IGitConfig';
+import { ILinuxConfig } from './ILinuxConfig';
+import { IWindowsConfig } from './IWindowsConfig';
 
 export interface INoinConfig {
-  app: boolean;
   production: boolean;
-  service: string;
-  targetPath: string;
   git: IGitConfig;
-  override: boolean;
-  systemd: ILinuxService;
+  linux: ILinuxConfig;
+  win32: IWindowsConfig;
   postCommands: string[];
+  override: boolean;
 }

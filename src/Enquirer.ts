@@ -1,9 +1,11 @@
 import enquirer from 'enquirer';
-import { INoinArguments } from './interfaces/INoinArguments';
+import * as _ from 'lodash';
 import { InstallMode } from './Enumerations';
 import { IGitConfig } from './interfaces/IGitConfig';
-import { ILinuxService } from './interfaces/ILinuxService';
-import * as _ from 'lodash';
+import { ILinuxServiceConfig } from './interfaces/ILinuxServiceConfig';
+import { INoinArguments } from './interfaces/INoinArguments';
+import { IRuntimeConfig } from './interfaces/IRuntimeConfig';
+import { IPlatformConfig } from './interfaces/IPlatformConfig';
 
 export namespace Enquirer {
 
@@ -44,6 +46,18 @@ export namespace Enquirer {
     });
 
     return result.service;
+  }
+
+  export async function getWorkingDirectory(defaultValue?: string): Promise<string> {
+    const answer = await enquirer.prompt<IPlatformConfig>({
+      type: 'input',
+      name: 'targetPath',
+      message: 'Target directory',
+      initial: defaultValue === undefined ? '' : defaultValue,
+      required: true
+    });
+
+    return answer.targetPath;
   }
 
   export async function getIsProduction(): Promise<boolean> {
@@ -102,12 +116,23 @@ export namespace Enquirer {
     };
   }
 
-  export async function getLinuxService(config: Partial<ILinuxService>): Promise<ILinuxService> {
+  export async function getLinuxService(config: Partial<ILinuxServiceConfig>): Promise<ILinuxServiceConfig> {
 
-    const result = _.cloneDeep<ILinuxService>(<any>config);
+    const result = _.cloneDeep<ILinuxServiceConfig>(<any>config);
+
+    // Service name
+    let answer = await enquirer.prompt<ILinuxServiceConfig>({
+      type: 'input',
+      name: 'serviceName',
+      message: 'Service name',
+      required: true,
+      skip: config.serviceName !== undefined
+    });
+
+    result.serviceName = answer.serviceName;
 
     // Service description
-    let answer = await enquirer.prompt<ILinuxService>({
+    answer = await enquirer.prompt<ILinuxServiceConfig>({
       type: 'input',
       name: 'Description',
       message: 'Service description',
@@ -119,7 +144,7 @@ export namespace Enquirer {
     result.Description = answer.Description;
 
     // After
-    answer = await enquirer.prompt<ILinuxService>({
+    answer = await enquirer.prompt<ILinuxServiceConfig>({
       type: 'input',
       name: 'After',
       message: 'Start after',
@@ -131,7 +156,7 @@ export namespace Enquirer {
     result.After = answer.After;
 
     // Restart
-    answer = await enquirer.prompt<ILinuxService>({
+    answer = await enquirer.prompt<ILinuxServiceConfig>({
       type: 'input',
       name: 'Restart',
       message: 'Restart mode',
@@ -142,7 +167,7 @@ export namespace Enquirer {
     result.Restart = answer.Restart;
 
     // User
-    answer = await enquirer.prompt<ILinuxService>({
+    answer = await enquirer.prompt<ILinuxServiceConfig>({
       type: 'input',
       name: 'User',
       message: 'User',
@@ -153,7 +178,7 @@ export namespace Enquirer {
     result.User = answer.User;
 
     // Group
-    answer = await enquirer.prompt<ILinuxService>({
+    answer = await enquirer.prompt<ILinuxServiceConfig>({
       type: 'input',
       name: 'Group',
       message: 'Group',
@@ -164,7 +189,7 @@ export namespace Enquirer {
     result.Group = answer.Group;
 
     // WorkingDirectory
-    answer = await enquirer.prompt<ILinuxService>({
+    answer = await enquirer.prompt<ILinuxServiceConfig>({
       type: 'input',
       name: 'WorkingDirectory',
       message: 'WorkingDirectory (Target directory)',
@@ -176,7 +201,7 @@ export namespace Enquirer {
     result.WorkingDirectory = answer.WorkingDirectory;
 
     // WantedBy
-    answer = await enquirer.prompt<ILinuxService>({
+    answer = await enquirer.prompt<ILinuxServiceConfig>({
       type: 'input',
       name: 'WantedBy',
       message: 'WantedBy',

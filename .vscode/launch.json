@@ -17,7 +17,8 @@
       "skipFiles": [
         "<node_internals>/**/*.js"
       ],
-      "console": "integratedTerminal"
+      "console": "integratedTerminal",
+      "sourceMaps": true
     },
     {
       "name": "Current TS File",

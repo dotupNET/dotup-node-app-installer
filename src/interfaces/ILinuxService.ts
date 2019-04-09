@@ -1,4 +1,6 @@
-export interface ILinuxService {
+import { IRuntimeConfig } from './IRuntimeConfig';
+
+export interface ILinuxService extends IRuntimeConfig {
   Description: string;
   After: string;
   // [Service]
@@ -8,8 +10,7 @@ export interface ILinuxService {
   // # Use 'nogroup' group for Ubuntu / Debian
   // # use 'nobody' group for Fedora
   Group: string;
-  Environment: string[];
-  WorkingDirectory: string;
   // [Install]
   WantedBy: string;
+  WorkingDirectory: string;
 }

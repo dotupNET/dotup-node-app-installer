@@ -9,6 +9,8 @@ import { PackageJsonReader } from './PackageJsonReader';
 import { shelly } from './Shelly';
 import rimraf = require('rimraf');
 import { PostCommands } from './PostCommands';
+import { IRuntimeConfig } from './interfaces/IRuntimeConfig';
+import { INoinArguments } from './interfaces/INoinArguments';
 
 export class App extends Configurator {
 
@@ -35,17 +37,19 @@ export class App extends Configurator {
       .parse(process.argv);
 
     this.rootDir = shelly.pwd().toString();
+    shelly.silent(true);
     const dir = shelly.exec('npm root -g').toString().split('\n')[0];
+    shelly.silent(false);
     this.noinDir = path.join(dir, 'dotup-node-app-installer', 'dist');
 
     // Get configuration
-    this.loadConfig(this.rootDir, <any>args);
-
-    const commands = new PostCommands(this.config);
-    commands.execute();
+    this.loadConfig(this.rootDir, <Partial<INoinArguments>>args);
   }
 
   async install(): Promise<void> {
+
+    // cd into temp folder
+    shelly.cdTemp();
 
     // Get git configuration
     await this.getGitConfig();
@@ -63,21 +67,27 @@ export class App extends Configurator {
     // Load cloned project package json
     const preader = new PackageJsonReader(this.repositoryDir);
 
+    // Get install mode (runtime service or app)
+    const mode = await this.getInstallMode();
+
     // Copy project to target and install dependencies
-    await this.createTarget(preader);
+    await this.createTarget(preader, mode);
+
+    // Install service
+    if (this.canInstallService(mode)) {
+      await this.installService(preader);
+    }
 
     // Clean up
     rimraf.sync(this.repositoryDir);
 
-    // Install service
-    const mode = await this.getInstallMode();
-    if (mode === InstallMode.service) {
-      await this.installService(preader);
-    }
-
     // Post commands
-  }
+    const commands = new PostCommands(this.config);
+    commands.execute();
 
+    // Done
+    shelly.echoGreen('Installation completed');
+  }
 
   async clone(): Promise<void> {
     // Clone repository. Should override if exists?
@@ -110,20 +120,22 @@ export class App extends Configurator {
     shelly.exec(`gulp project-build`);
   }
 
-  async createTarget(preader: PackageJsonReader): Promise<void> {
+  async createTarget(preader: PackageJsonReader, mode: InstallMode): Promise<void> {
     // copy to target
+
+    const runtimeConfig = this.getPlatformConfig();
 
     shelly.echoGreen('Copy binaries to target');
     let source = path.join(preader.getPathToExec(this.repositoryDir));
     shelly.echoGrey(`Source '${source}'`);
-    shelly.echoGrey(`Target '${this.config.targetPath}'`);
-    shelly.cp(source, this.config.targetPath);
+    shelly.echoGrey(`Target '${runtimeConfig.targetPath}'`);
+    shelly.cp(source, runtimeConfig.targetPath);
 
     source = path.join(this.repositoryDir, 'package.json');
-    shelly.cp(source, this.config.targetPath);
+    shelly.cp(source, runtimeConfig.targetPath);
 
     // cd into target path
-    shelly.cd(this.config.targetPath);
+    shelly.cd(runtimeConfig.targetPath);
 
     // Install packages
     const isProduction = await this.getIsProduction();
@@ -134,12 +146,17 @@ export class App extends Configurator {
 
   async installService(preader: PackageJsonReader): Promise<void> {
 
+    const serviceConfig = this.getServiceConfig();
+
+    const serviceName = serviceConfig.serviceName;
+    const targetPath = serviceConfig.WorkingDirectory;
+
     if (
-      this.config.systemd.ExecStart === undefined ||
-      this.config.systemd.WorkingDirectory === undefined
+      serviceConfig.ExecStart === undefined ||
+      serviceConfig.WorkingDirectory === undefined
     ) {
-      this.config.systemd.ExecStart = preader.getBin(this.config.targetPath);
-      this.config.systemd.WorkingDirectory = preader.getPathToExec(this.config.targetPath);
+      serviceConfig.ExecStart = preader.getBin(targetPath);
+      serviceConfig.WorkingDirectory = preader.getPathToExec(targetPath);
     }
 
     const service = await this.getLinuxService();
@@ -150,11 +167,8 @@ export class App extends Configurator {
     const serviceFile = await ls.generateFile(template, service);
 
     // Install
-    shelly.echoGreen(`Installing linux service '${this.config.service}'`);
-    ls.install(this.config, serviceFile);
-
-    shelly.echoGreen('Installation completed');
-
+    shelly.echoGreen(`Installing linux service '${serviceName}'`);
+    ls.install(serviceConfig, serviceFile);
   }
   //   // Create temp and target path
   //   this.mkdir();

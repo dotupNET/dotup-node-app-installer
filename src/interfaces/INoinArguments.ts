@@ -1,9 +1,9 @@
 export interface INoinArguments {
   app?: boolean;
   production?: boolean;
-  service: string,
+  service: string;
   targetPath?: string;
   userName: string;
-  repositoryName: string
+  repositoryName: string;
   override?: boolean;
 }

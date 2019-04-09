@@ -4,6 +4,10 @@ import path from 'path';
 
 export namespace shelly {
 
+  export function silent(value: boolean): void {
+    shell.config.silent = value;
+  }
+
   export function pwd(): ShellString {
     return shell.pwd();
   }

@@ -1,9 +1,9 @@
 import { renderFile } from 'ejs';
-import { ILinuxService } from './interfaces/ILinuxService';
-import { shelly } from './Shelly';
-import { INoinConfig } from './interfaces/INoinConfig';
 import fs from 'fs';
 import path from 'path';
+import { ILinuxService } from './interfaces/ILinuxService';
+import { ILinuxServiceConfig } from './interfaces/ILinuxServiceConfig';
+import { shelly } from './Shelly';
 
 export class LinuxService {
 
@@ -11,8 +11,8 @@ export class LinuxService {
     return await renderFile<string>(templateFilePath, data);
   }
 
-  install(config: INoinConfig, serviceFile: string): void {
-    const serviceName = `${config.service}.service`;
+  install(config: ILinuxServiceConfig, serviceFile: string): void {
+    const serviceName = `${config.serviceName}.service`;
     const srcFile = path.join(shelly.getTempDir(), serviceName);
     const targetFile = `/etc/systemd/system/${serviceName}`;
     const cmd = `sudo mv ${srcFile} ${targetFile}`;

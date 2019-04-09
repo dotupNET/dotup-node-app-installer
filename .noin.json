@@ -1,0 +1,43 @@
+{
+  "production": true,
+  "git": {
+    "userName": "dotupNET",
+    "repositoryName": "motolaps-device-discovery-service"
+  },
+  "linux": {
+    "targetPath": "/home/pi/moto/discovery",
+    "app": {
+      "Environment": [
+        "/usr/bin:/usr/local/bin",
+        "NODE_ENV=production"
+      ]
+    },
+    "systemd": {
+      "serviceName": "motolaps-mqtt-dds",
+      "Description": "MotoLaps MQTT device discovery service",
+      "After": "network.target",
+      "ExecStart": "/usr/bin/node app.js",
+      "Restart": "on-failure",
+      "User": "pi",
+      "Group": "pi",
+      "Environment": [
+        "PATH=/usr/bin:/usr/local/bin",
+        "NODE_ENV=production"
+      ],
+      "WantedBy": "multi-user.target"
+    },
+    "win32": {
+      "targetPath": "C:/dotup/moto/discovery",
+      "app": {
+        "Environment": [
+          "NODE_ENV=production"
+        ]
+      }
+    }
+  },
+  "postCommands": [
+    "sudo systemctl daemon-reload",
+    "sudo systemctl enable {service}",
+    "sudo systemctl restart {service}"
+  ]
+}
