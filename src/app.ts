@@ -56,13 +56,13 @@ export class App extends Configurator {
     this.repositoryDir = path.join(shelly.getTempDir(), this.config.git.repositoryName);
 
     // Clone repository. Should override if exists?
-   await this.clone();
+    await this.clone();
 
     // Load config from repository
     this.loadConfig(this.repositoryDir);
 
     // Install dependencies and Build project
-   this.build();
+    this.build();
 
     // Load cloned project package json
     const preader = new PackageJsonReader(this.repositoryDir);
@@ -159,7 +159,10 @@ export class App extends Configurator {
       serviceConfig.ExecStart === undefined ||
       serviceConfig.WorkingDirectory === undefined
     ) {
-      serviceConfig.ExecStart = preader.getBin(targetPath);
+      const node = shelly.which('node');
+      const bin = preader.getBin(targetPath);
+      const exec = `${node} ${bin}`;
+      serviceConfig.ExecStart = exec;
       serviceConfig.WorkingDirectory = preader.getPathToExec(targetPath);
     }
 

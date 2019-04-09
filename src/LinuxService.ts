@@ -15,17 +15,17 @@ export class LinuxService {
     const serviceName = `${config.serviceName}.service`;
     const srcFile = path.join(shelly.getTempDir(), serviceName);
     const targetFile = `/etc/systemd/system/${serviceName}`;
-    const cmd = `sudo mv ${srcFile} ${targetFile}`;
 
     // Write to tmp
     fs.writeFileSync(srcFile, serviceFile);
 
     // move to target folder
+    const cmd = `sudo mv ${srcFile} ${targetFile}`;
     shelly.exec(cmd);
 
-    shelly.exec('sudo systemctl daemon-reload');
-    shelly.exec(`sudo systemctl enable ${serviceName}`);
-    shelly.exec(`sudo systemctl restart ${serviceName}`);
+    // shelly.exec('sudo systemctl daemon-reload');
+    // shelly.exec(`sudo systemctl enable ${serviceName}`);
+    // shelly.exec(`sudo systemctl restart ${serviceName}`);
   }
 
 }
