@@ -35,6 +35,7 @@ export class Configurator {
 
     if (mode === InstallMode.service) {
       // service
+      runtime.app = undefined;
       if (runtime.systemd === undefined) {
         // const name = await Enquirer.getServiceName();
         runtime.systemd = <ILinuxServiceConfig>{};
@@ -42,6 +43,7 @@ export class Configurator {
       }
     } else {
       // app
+      runtime.systemd = undefined;
       if (runtime.app === undefined) {
         const targetPath = await Enquirer.getTargetPath(runtime.targetPath);
         this.cm.setAppConfig(targetPath);
