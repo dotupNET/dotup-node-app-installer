@@ -69,6 +69,8 @@ export class App extends Configurator {
 
     // Get install mode (runtime service or app)
     const mode = await this.getInstallMode();
+    const runtimeConfig = this.cm.getPlatformConfig();
+    runtimeConfig.bin = preader.getBin(runtimeConfig.targetPath);
 
     // Copy project to target and install dependencies
     await this.createTarget(preader, mode);
@@ -120,6 +122,7 @@ export class App extends Configurator {
     shelly.exec(`gulp project-build`);
   }
 
+  // TODO: Refactor
   async createTarget(preader: PackageJsonReader, mode: InstallMode): Promise<void> {
     // copy to target
 

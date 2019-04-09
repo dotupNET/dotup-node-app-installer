@@ -1,9 +1,7 @@
-import { INoinConfig } from './interfaces/INoinConfig';
-import { shelly } from './Shelly';
-import { replace } from 'dotup-ts-types';
-import { IPlatformConfig } from './interfaces/IPlatformConfig';
-import os from 'os';
+import { replacePath } from 'dotup-ts-types';
 import { ConfigManager } from './ConfigManager';
+import { shelly } from './Shelly';
+import _ from 'lodash';
 
 export class PostCommands {
   private readonly config: ConfigManager;
@@ -23,7 +21,7 @@ export class PostCommands {
 
     const commands = runtime.postCommands;
     commands.forEach(command => {
-      const cmd = replace(command, this.config);
+      const cmd = replacePath(command, this.config);
       shelly.exec(cmd);
     });
 

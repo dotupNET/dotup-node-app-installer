@@ -10,6 +10,10 @@
       "Environment": [
         "/usr/bin:/usr/local/bin",
         "NODE_ENV=production"
+      ],
+      "postCommands": [
+        "sudo chmod +x {bin}",
+        "sudo ln -s {bin} /usr/bin/motobox"
       ]
     },
     "systemd": {
