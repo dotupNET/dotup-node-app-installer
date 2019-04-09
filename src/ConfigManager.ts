@@ -20,7 +20,7 @@ export class ConfigManager {
 
     if (fs.existsSync(configFile)) {
       // Config from file
-      shelly.echoGrey(`Loading configuration from file ${configFile}`);
+      shelly.echoGrey(`Loading configuration from ${configFile}`);
       const fileConfig = <INoinConfig>JSON.parse((fs.readFileSync(configFile, 'utf8')));
       this.config = fileConfig;
 
