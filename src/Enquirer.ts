@@ -26,7 +26,7 @@ export namespace Enquirer {
       message: 'Choose installation mode.'
     });
 
-    if (result.service === 'service') {
+    if (result.service === 'Install as service') {
       // service
       return InstallMode.service;
     } else {
