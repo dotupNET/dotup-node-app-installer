@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "dotup-ts-git-wrapper": "^1.0.0",
-    "dotup-ts-types": "^0.1.4",
+    "dotup-ts-types": "^0.1.6",
     "chalk": "^2.4.2",
     "commander": "^2.20.0",
     "enquirer": "^2.3.0",
