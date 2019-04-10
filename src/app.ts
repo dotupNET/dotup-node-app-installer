@@ -11,6 +11,7 @@ import rimraf = require('rimraf');
 import { PostCommands } from './PostCommands';
 import { IRuntimeConfig } from './interfaces/IRuntimeConfig';
 import { INoinArguments } from './interfaces/INoinArguments';
+import { Environment } from './Environment';
 
 export class App extends Configurator {
 
@@ -75,9 +76,14 @@ export class App extends Configurator {
     // Copy project to target and install dependencies
     await this.createTarget(preader, mode);
 
+    // Create dotenv file
+    const env = new Environment();
+    const platformConfig = this.cm.getPlatformConfig();
+    env.createFile(path.join(platformConfig.targetPath, '.env'), this.cm.getRuntimeConfig(mode));
+
     // Install service
     if (this.cm.canInstallService(mode)) {
-      await this.installService(preader);
+      await this.installService(preader, env);
     }
 
     // Clean up
@@ -124,21 +130,20 @@ export class App extends Configurator {
 
   // TODO: Refactor
   async createTarget(preader: PackageJsonReader, mode: InstallMode): Promise<void> {
+    const platformConfig = this.cm.getPlatformConfig();
+
     // copy to target
-
-    const runtimeConfig = this.cm.getPlatformConfig();
-
     shelly.echoGreen('Copy binaries to target');
     let source = path.join(preader.getPathToExec(this.repositoryDir));
     shelly.echoGrey(`Source '${source}'`);
-    shelly.echoGrey(`Target '${runtimeConfig.targetPath}'`);
-    shelly.cp(source, runtimeConfig.targetPath);
+    shelly.echoGrey(`Target '${platformConfig.targetPath}'`);
+    shelly.cp(source, platformConfig.targetPath);
 
     source = path.join(this.repositoryDir, 'package.json');
-    shelly.cp(source, runtimeConfig.targetPath);
+    shelly.cp(source, platformConfig.targetPath);
 
     // cd into target path
-    shelly.cd(runtimeConfig.targetPath);
+    shelly.cd(platformConfig.targetPath);
 
     // Install packages
     const isProduction = await this.getIsProduction();
@@ -147,7 +152,7 @@ export class App extends Configurator {
     shelly.exec(`npm install ${installProd}`);
   }
 
-  async installService(preader: PackageJsonReader): Promise<void> {
+  async installService(preader: PackageJsonReader, env: Environment): Promise<void> {
 
     const runtimeConfig = this.cm.getPlatformConfig();
     const serviceConfig = this.cm.getServiceConfig();
@@ -161,7 +166,11 @@ export class App extends Configurator {
     ) {
       const node = shelly.which('node');
       const bin = preader.getBin(targetPath);
-      const exec = `${node} ${bin}`;
+      let exec = `${node}`;
+      if (env.filePath !== undefined) {
+        exec = `${exec} -r dotenv/config`;
+      }
+      exec = `${exec} ${bin}`;
       serviceConfig.ExecStart = exec;
       serviceConfig.WorkingDirectory = preader.getPathToExec(targetPath);
     }
