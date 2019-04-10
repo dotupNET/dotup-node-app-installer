@@ -4,15 +4,15 @@ import { shelly } from './Shelly';
 import _ from 'lodash';
 
 export class PostCommands {
-  private readonly config: ConfigManager;
+  private readonly cm: ConfigManager;
 
   constructor(config: ConfigManager) {
-    this.config = config;
+    this.cm = config;
   }
 
   execute(): void {
-    const mode = this.config.getInstallMode();
-    const runtime = this.config.getRuntimeConfig(mode);
+    const mode = this.cm.getInstallMode();
+    const runtime = this.cm.getRuntimeConfig(mode);
     if (runtime === undefined || runtime.postCommands === undefined || runtime.postCommands.length < 1) {
       return;
     }
@@ -21,7 +21,7 @@ export class PostCommands {
 
     const commands = runtime.postCommands;
     commands.forEach(command => {
-      const cmd = replacePath(command, this.config);
+      const cmd = replacePath(command, this.cm.config);
       shelly.echoGrey(cmd);
       shelly.exec(cmd);
     });
