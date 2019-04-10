@@ -10,6 +10,7 @@ import { IPlatformConfig } from './interfaces/IPlatformConfig';
 import { IAppConfig } from './interfaces/IAppConfig';
 import { IWindowsConfig } from './interfaces/IWindowsConfig';
 import { shelly } from './Shelly';
+import { ObjectTools } from 'dotup-ts-types';
 
 export class ConfigManager {
 
@@ -98,12 +99,12 @@ export class ConfigManager {
       if (this.config.win32 === undefined) {
         this.config.win32 = <IWindowsConfig>{};
       }
-      this.config.win32.app = <IAppConfig>config;
+      ObjectTools.CopyEachSource(this.config.win32, config);
     } else if (os.platform() === 'linux') {
       if (this.config.linux === undefined) {
         this.config.linux = <ILinuxConfig>{};
       }
-      this.config.linux.app = <IAppConfig>config;
+      ObjectTools.CopyEachSource(this.config.linux, config);
     } else {
       throw new Error(`Platform '${os.platform()}' not supported`);
     }
