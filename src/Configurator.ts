@@ -11,6 +11,7 @@ import { ILinuxServiceConfig } from './interfaces/ILinuxServiceConfig';
 import { INoinConfig } from './interfaces/INoinConfig';
 import { shelly } from './Shelly';
 import { INoinArguments } from './interfaces/INoinArguments';
+import { IAppConfig } from './interfaces/IAppConfig';
 
 export class Configurator {
 
@@ -46,7 +47,7 @@ export class Configurator {
       runtime.systemd = undefined;
       if (runtime.app === undefined) {
         const targetPath = await Enquirer.getTargetPath(runtime.targetPath);
-        this.cm.setAppConfig(targetPath);
+        this.cm.setPlatformConfig({ targetPath: targetPath });
       }
     }
 
@@ -75,6 +76,14 @@ export class Configurator {
   async getLinuxService(): Promise<ILinuxService> {
     const config = this.cm.getServiceConfig();
     this.config.linux.systemd = await Enquirer.getLinuxService(config);
+
+    return this.config.linux.systemd;
+  }
+
+  async getApp(mode: InstallMode): Promise<IAppConfig> {
+    const config = this.cm.getRuntimeConfig(mode);
+    const app = await Enquirer.getApp(config);
+    this.cm.setPlatformConfig({ app: app });
 
     return this.config.linux.systemd;
   }

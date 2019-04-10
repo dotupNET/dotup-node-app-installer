@@ -7,7 +7,7 @@ import { ILinuxServiceConfig } from './interfaces/ILinuxServiceConfig';
 import { INoinArguments } from './interfaces/INoinArguments';
 import { INoinConfig } from './interfaces/INoinConfig';
 import { IPlatformConfig } from './interfaces/IPlatformConfig';
-import { IRuntimeConfig } from './interfaces/IRuntimeConfig';
+import { IAppConfig } from './interfaces/IAppConfig';
 import { IWindowsConfig } from './interfaces/IWindowsConfig';
 import { shelly } from './Shelly';
 
@@ -45,7 +45,7 @@ export class ConfigManager {
       };
 
       if (args.app !== undefined) {
-        this.setAppConfig(args.targetPath);
+        this.setPlatformConfig({ targetPath: args.targetPath });
       } else {
         if (args.service !== undefined) {
           this.config.linux.systemd = <ILinuxServiceConfig>{};
@@ -92,23 +92,24 @@ export class ConfigManager {
     return false;
   }
 
-  setAppConfig(targetPath: string): void {
-    const runtimeConfig: Partial<IPlatformConfig> = {
-      targetPath: targetPath
-    };
+  setPlatformConfig(config: Partial<IPlatformConfig>): void {
 
     if (os.platform() === 'win32') {
-      this.config.win32 = <IWindowsConfig>{};
-      this.config.win32.app = <IRuntimeConfig>runtimeConfig;
+      if (this.config.win32 === undefined) {
+        this.config.win32 = <IWindowsConfig>{};
+      }
+      this.config.win32.app = <IAppConfig>config;
     } else if (os.platform() === 'linux') {
-      this.config.linux = <ILinuxConfig>{};
-      this.config.linux.app = <IRuntimeConfig>runtimeConfig;
+      if (this.config.linux === undefined) {
+        this.config.linux = <ILinuxConfig>{};
+      }
+      this.config.linux.app = <IAppConfig>config;
     } else {
       throw new Error(`Platform '${os.platform()}' not supported`);
     }
   }
 
-  getRuntimeConfig(mode: InstallMode): IRuntimeConfig {
+  getRuntimeConfig(mode: InstallMode): IAppConfig {
     if (mode === InstallMode.app) {
       return this.getPlatformConfig<IPlatformConfig>().app;
     } else {

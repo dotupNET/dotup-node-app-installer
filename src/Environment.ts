@@ -1,11 +1,11 @@
-import { IRuntimeConfig } from './interfaces/IRuntimeConfig';
+import { IAppConfig } from './interfaces/IAppConfig';
 import fs from 'fs';
 
 export class Environment {
 
   filePath: string;
 
-  createFile(filePath: string, config: IRuntimeConfig): void {
+  createFile(filePath: string, config: IAppConfig): void {
     if (config.Environment === undefined || config.Environment.length < 1) {
       return;
     }

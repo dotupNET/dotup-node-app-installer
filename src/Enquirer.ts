@@ -4,7 +4,7 @@ import { InstallMode } from './Enumerations';
 import { IGitConfig } from './interfaces/IGitConfig';
 import { ILinuxServiceConfig } from './interfaces/ILinuxServiceConfig';
 import { INoinArguments } from './interfaces/INoinArguments';
-import { IRuntimeConfig } from './interfaces/IRuntimeConfig';
+import { IAppConfig } from './interfaces/IAppConfig';
 import { IPlatformConfig } from './interfaces/IPlatformConfig';
 
 export namespace Enquirer {
@@ -114,7 +114,7 @@ export namespace Enquirer {
       type: 'input',
       name: 'serviceName',
       message: 'Service name',
-      initial: config.serviceName === undefined ? '': config.serviceName,
+      initial: config.serviceName === undefined ? '' : config.serviceName,
       required: true,
       skip: config.serviceName !== undefined
     });
@@ -156,27 +156,10 @@ export namespace Enquirer {
 
     result.Restart = answer.Restart;
 
-    // User
-    answer = await enquirer.prompt<ILinuxServiceConfig>({
-      type: 'input',
-      name: 'User',
-      message: 'User',
-      initial: config.User,
-      required: true
-    });
-
-    result.User = answer.User;
-
-    // Group
-    answer = await enquirer.prompt<ILinuxServiceConfig>({
-      type: 'input',
-      name: 'Group',
-      message: 'Group',
-      initial: config.Group,
-      required: true
-    });
-
-    result.Group = answer.Group;
+    // User and Group
+    const app = await getApp(config);
+    result.User = app.User;
+    result.Group = app.Group;
 
     // WorkingDirectory
     answer = await enquirer.prompt<ILinuxServiceConfig>({
@@ -201,6 +184,35 @@ export namespace Enquirer {
     });
 
     result.WantedBy = answer.WantedBy;
+
+    return result;
+  }
+
+  export async function getApp(config: Partial<IAppConfig>): Promise<IAppConfig> {
+
+    const result = _.cloneDeep<IAppConfig>(<any>config);
+
+    // User
+    let answer = await enquirer.prompt<IAppConfig>({
+      type: 'input',
+      name: 'User',
+      message: 'User',
+      initial: config.User,
+      required: true
+    });
+
+    result.User = answer.User;
+
+    // Group
+    answer = await enquirer.prompt<IAppConfig>({
+      type: 'input',
+      name: 'Group',
+      message: 'Group',
+      initial: config.Group,
+      required: true
+    });
+
+    result.Group = answer.Group;
 
     return result;
   }

@@ -7,6 +7,8 @@
   "linux": {
     "targetPath": "/home/pi/moto/discovery",
     "app": {
+      "User": "pi",
+      "Group": "pi",
       "Environment": [
         "/usr/bin:/usr/local/bin",
         "NODE_ENV=production"

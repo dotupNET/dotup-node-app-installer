@@ -1,5 +1,5 @@
 import { ILinuxServiceConfig } from './ILinuxServiceConfig';
-import { IRuntimeConfig } from './IRuntimeConfig';
+import { IAppConfig } from './IAppConfig';
 import { IPlatformConfig } from './IPlatformConfig';
 
 export interface ILinuxConfig extends IPlatformConfig {

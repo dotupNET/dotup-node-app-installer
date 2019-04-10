@@ -9,7 +9,7 @@ import { PackageJsonReader } from './PackageJsonReader';
 import { shelly } from './Shelly';
 import rimraf = require('rimraf');
 import { PostCommands } from './PostCommands';
-import { IRuntimeConfig } from './interfaces/IRuntimeConfig';
+import { IAppConfig } from './interfaces/IAppConfig';
 import { INoinArguments } from './interfaces/INoinArguments';
 import { Environment } from './Environment';
 
@@ -21,7 +21,6 @@ export class App extends Configurator {
 
   constructor() {
     super();
-
 
     /*
     TODO: sudo ln -s /home/pi/moto/motobox/dist/app.js /usr/bin/motobox
@@ -62,9 +61,6 @@ export class App extends Configurator {
     // Load config from repository
     this.loadConfig(this.repositoryDir);
 
-    // Install dependencies and Build project
-    this.build();
-
     // Load cloned project package json
     const preader = new PackageJsonReader(this.repositoryDir);
 
@@ -72,6 +68,9 @@ export class App extends Configurator {
     const mode = await this.getInstallMode();
     const runtimeConfig = this.cm.getPlatformConfig();
     runtimeConfig.bin = preader.getBin(runtimeConfig.targetPath);
+
+    // Install dependencies and Build project
+    this.build();
 
     // Copy project to target and install dependencies
     await this.createTarget(preader, mode);
@@ -84,6 +83,8 @@ export class App extends Configurator {
     // Install service
     if (this.cm.canInstallService(mode)) {
       await this.installService(preader, env);
+    } else {
+      await this.getApp(mode);
     }
 
     // Clean up
