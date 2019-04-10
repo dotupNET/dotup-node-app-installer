@@ -168,7 +168,7 @@ export class App extends Configurator {
       const bin = preader.getBin(targetPath);
       let exec = `${node}`;
       if (env.filePath !== undefined) {
-        exec = `${exec} -r dotenv/config`;
+        exec = `${exec} -r dotenv/config dotenv_config_path=${targetPath}/.env`;
       }
       exec = `${exec} ${bin}`;
       serviceConfig.ExecStart = exec;
