@@ -12,8 +12,10 @@ export class PostCommands {
 
   execute(): void {
     const mode = this.cm.getInstallMode();
+    const platform = this.cm.getPlatformConfig();
     const runtime = this.cm.getRuntimeConfig(mode);
-    _.merge(runtime, this.cm.getPlatformConfig());
+
+    _.merge(runtime, platform);
     if (runtime === undefined || runtime.postCommands === undefined || runtime.postCommands.length < 1) {
       return;
     }
