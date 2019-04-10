@@ -1,4 +1,4 @@
-import { replacePath } from 'dotup-ts-types';
+import { replacePath, ObjectTools } from 'dotup-ts-types';
 import { ConfigManager } from './ConfigManager';
 import { shelly } from './Shelly';
 import _ from 'lodash';
@@ -15,7 +15,8 @@ export class PostCommands {
     const platform = this.cm.getPlatformConfig();
     const runtime = this.cm.getRuntimeConfig(mode);
 
-    _.merge(runtime, platform);
+    ObjectTools.CopyEachSource(platform, runtime);
+
     if (runtime === undefined || runtime.postCommands === undefined || runtime.postCommands.length < 1) {
       return;
     }
