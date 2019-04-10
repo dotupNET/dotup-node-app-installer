@@ -21,7 +21,7 @@ export class PostCommands {
 
     const commands = runtime.postCommands;
     commands.forEach(command => {
-      const cmd = replacePath(command, this.cm.config);
+      const cmd = replacePath(command, runtime);
       shelly.echoGrey(cmd);
       shelly.exec(cmd);
     });
