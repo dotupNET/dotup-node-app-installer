@@ -10,7 +10,7 @@ export class Environment {
       return;
     }
 
-    const content = config.Environment.map(line => `${line} \n`);
+    const content = config.Environment.join(`\n`);
     fs.writeFileSync(filePath, content, { encoding: 'utf8' });
 
     this.filePath = filePath;
