@@ -10,6 +10,7 @@
       "name": "Launch Program",
       "program": "${workspaceFolder}/dist/app.js",
       "args": [
+        "-u", "dotupNET"
       ],
       "outFiles": [
         "${workspaceFolder}/dist/*.js"

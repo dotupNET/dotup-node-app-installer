@@ -120,6 +120,7 @@ export class ConfigManager {
     const result = (<any>this.config)[os.platform()];
 
     if (result === undefined) {
+      shelly.echoYellow(JSON.stringify(this.config, undefined, 2));
       throw new Error(`Platform '${result}' not configured`);
     }
 
