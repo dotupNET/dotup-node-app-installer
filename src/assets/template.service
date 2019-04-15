@@ -4,6 +4,8 @@ After=<%= After %>
 [Service]
 ExecStart=<%= ExecStart %>
 Restart=<%= Restart %>
+RestartSec=5
+TimeoutStartSec=5
 User=<%= User %>
 # Use 'nogroup' group for Ubuntu/Debian
 # use 'nobody' group for Fedora
