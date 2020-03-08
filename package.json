@@ -45,7 +45,7 @@
     "dotup-ts-git-wrapper": "^1.0.0",
     "@dotup/dotup-ts-types": "1.1.1",
     "chalk": "^2.4.2",
-    "commander": "^2.20.0",
+    "commander": "^4.1.1",
     "enquirer": "^2.3.0",
     "shelljs": "^0.8.3",
     "ejs": "^2.6.1",

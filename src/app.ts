@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import commander from "commander";
+import * as commander from "commander";
 import path from "path";
 import { Configurator } from "./Configurator";
 import { InstallMode } from "./Enumerations";
@@ -34,7 +34,7 @@ export class App extends Configurator {
       .option("-r, --repositoryName <repositoryname>", "Github repository name")
       .option("-t, --target [targetpath]", "Target path to install to.")
       .option("-o, --override [true/false]", "Override tmp and target folders.")
-      .parse(process.argv);
+      .parse(process.argv || []);
 
     this.rootDir = shelly.pwd().toString();
     shelly.silent(true);
