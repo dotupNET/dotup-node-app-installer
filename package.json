@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.2",
   "name": "@dotup/node-app-installer",
   "description": "Installer for node js applications. Install as app or service on linux.",
   "scripts": {
@@ -9,7 +9,7 @@
     "build-esnext": "npm run lint && npm run clean-dist && tsc -p tsconfig.esnext.json && npm run copy-static-assets",
     "build-r": "npm run lint && npm run clean-dist && rollup -c && npm run copy-static-assets",
     "release": "npm run release-ts",
-    "release-ts": "npm run gh-pages && npm run build-ts && npm run test && git push && npm run publish-pnpm",
+    "release-ts": "npm run build-ts && git push && npm run publish-pnpm",
     "release-esnext": "npm run gh-pages && npm run build-esnext && npm run test && git push && npm run publish-pnpm",
     "release-r": "npm run gh-pages && npm run build-r && npm run test && git push && npm run publish-pnpm",
     "postversion": "git push && git push --tags",
@@ -42,21 +42,21 @@
     "commit-release": "git commit -a -m \"Release v%npm_package_version%\" && git push && git tag -a v%npm_package_version% -m \"Release v%npm_package_version%\" && git push origin --tags"
   },
   "dependencies": {
-    "dotup-ts-git-wrapper": "^1.0.0",
     "@dotup/dotup-ts-types": "1.1.1",
-    "chalk": "^2.4.2",
+    "chalk": "^3.0.0",
     "commander": "^4.1.1",
-    "enquirer": "^2.3.0",
-    "shelljs": "^0.8.3",
-    "ejs": "^2.6.1",
-    "rimraf": "^2.6.3"
+    "dotup-ts-git-wrapper": "^1.0.0",
+    "ejs": "^3.0.1",
+    "enquirer": "^2.3.4",
+    "rimraf": "^3.0.2",
+    "shelljs": "^0.8.3"
   },
   "devDependencies": {
     "@types/chai": "^4.2.10",
-    "@types/ejs": "^2.6.3",
+    "@types/ejs": "^3.0.1",
     "@types/eslint": "^6.1.8",
     "@types/mocha": "^7.0.2",
-    "@types/node": "13.7.7",
+    "@types/node": "13.9.0",
     "@types/rimraf": "2.0.3",
     "@types/shelljs": "^0.8.6",
     "@types/uuid": "^7.0.0",

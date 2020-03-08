@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import * as commander from "commander";
+import commander from "commander";
 import path from "path";
 import { Configurator } from "./Configurator";
 import { InstallMode } from "./Enumerations";

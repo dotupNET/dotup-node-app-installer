@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import * as shell from "shelljs";
+import shell from "shelljs";
 import path from "path";
 
 export namespace shelly {

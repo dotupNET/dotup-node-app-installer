@@ -8,6 +8,7 @@
     "node_modules"
   ],
   "compilerOptions": {
+    "target": "es2017",
     "outDir": "dist",
     "rootDir": "src"
   }
