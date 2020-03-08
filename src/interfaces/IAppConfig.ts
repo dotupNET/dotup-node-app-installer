@@ -5,5 +5,4 @@ export interface IAppConfig {
   // # Use 'nogroup' group for Ubuntu / Debian
   // # use 'nobody' group for Fedora
   Group: string;
-
 }

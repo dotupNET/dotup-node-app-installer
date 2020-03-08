@@ -1,56 +1,56 @@
-import fs from 'fs';
-import os from 'os';
-import path from 'path';
-import { InstallMode } from './Enumerations';
-import { ILinuxConfig } from './interfaces/ILinuxConfig';
-import { ILinuxServiceConfig } from './interfaces/ILinuxServiceConfig';
-import { INoinArguments } from './interfaces/INoinArguments';
-import { INoinConfig } from './interfaces/INoinConfig';
-import { IPlatformConfig } from './interfaces/IPlatformConfig';
-import { IAppConfig } from './interfaces/IAppConfig';
-import { IWindowsConfig } from './interfaces/IWindowsConfig';
-import { shelly } from './Shelly';
-import { ObjectTools } from 'dotup-ts-types';
+import fs from "fs";
+import os from "os";
+import path from "path";
+import { InstallMode } from "./Enumerations";
+import { ILinuxConfig } from "./interfaces/ILinuxConfig";
+import { ILinuxServiceConfig } from "./interfaces/ILinuxServiceConfig";
+import { INoinArguments } from "./interfaces/INoinArguments";
+import { INoinConfig } from "./interfaces/INoinConfig";
+import { IPlatformConfig } from "./interfaces/IPlatformConfig";
+import { IAppConfig } from "./interfaces/IAppConfig";
+import { IWindowsConfig } from "./interfaces/IWindowsConfig";
+import { shelly } from "./Shelly";
+import { ObjectTools } from "@dotup/dotup-ts-types";
 
 export class ConfigManager {
 
   config: INoinConfig;
 
-  loadConfig(dir: string, args?: Partial<INoinArguments>): INoinConfig {
-    const configFile = path.join(dir, '.noin.json');
+  loadConfig(dir: string, args?: Partial<INoinArguments>): INoinConfig | undefined {
+    const configFile = path.join(dir, ".noin.json");
 
     if (fs.existsSync(configFile)) {
       // Config from file
       shelly.echoGrey(`Loading configuration from ${configFile}`);
-      const fileConfig = <INoinConfig>JSON.parse((fs.readFileSync(configFile, 'utf8')));
+      const fileConfig = JSON.parse((fs.readFileSync(configFile, "utf8"))) as INoinConfig;
       this.config = fileConfig;
 
     } else if (args === undefined) {
       // No configuration
-      shelly.echoYellow(`No configuration provided`);
-      args = <INoinArguments>{};
+      shelly.echoYellow("No configuration provided");
+      args = {} as INoinConfig;
 
     } else {
       // Config from args
-      shelly.echoGrey(`Loading configuration from arguments`);
+      shelly.echoGrey("Loading configuration from arguments");
       this.config = {
-        production: args.production,
-        override: args.override,
+        production: args.production || true,
+        override: args.override || true,
         git: {
-          repositoryName: args.repositoryName,
-          userName: args.userName,
-          url: ''
+          repositoryName: args.repositoryName || "",
+          userName: args.userName || "",
+          url: ""
         },
-        linux: os.platform() === 'linux' ? <ILinuxConfig>{} : undefined,
-        win32: os.platform() === 'win32' ? <IWindowsConfig>{} : undefined
+        linux: os.platform() === "linux" ? {} as ILinuxConfig : undefined,
+        win32: os.platform() === "win32" ? {} as IWindowsConfig : undefined
       };
 
-      if (args.app !== undefined) {
+      if (args.app !== undefined && args.targetPath) {
         this.setPlatformConfig({ targetPath: args.targetPath });
       } else {
-        if (args.service !== undefined) {
-          this.config.linux.systemd = <ILinuxServiceConfig>{};
-          this.config.linux.systemd.WorkingDirectory = args.targetPath;
+        if (args.service !== undefined && args.targetPath) {
+          this.config.linux!.systemd = {} as ILinuxServiceConfig;
+          this.config.linux!.systemd.WorkingDirectory = args.targetPath;
         }
       }
 
@@ -58,7 +58,7 @@ export class ConfigManager {
     }
   }
 
-  getInstallMode(): InstallMode {
+  getInstallMode(): InstallMode | undefined {
     const runtime = this.getPlatformConfig<ILinuxConfig>();
     if (runtime.app !== undefined && runtime.systemd === undefined) {
       return InstallMode.app;
@@ -75,7 +75,7 @@ export class ConfigManager {
     return this.config.production;
   }
 
-  getServiceConfig(): ILinuxServiceConfig {
+  getServiceConfig(): ILinuxServiceConfig | undefined {
     if (this.config.linux === undefined) { return undefined; }
     // this.config.linux.systemd.WorkingDirectory = this.config.linux.targetPath;
     return this.config.linux.systemd;
@@ -83,7 +83,7 @@ export class ConfigManager {
 
   canInstallService(mode: InstallMode): boolean {
     if (mode === InstallMode.service) {
-      if (os.platform() === 'linux') {
+      if (os.platform() === "linux") {
         return true;
       } else {
         shelly.echoYellow(`Service installation not support on platform '${os.platform()}'`);
@@ -95,14 +95,14 @@ export class ConfigManager {
 
   setPlatformConfig(config: Partial<IPlatformConfig>): void {
 
-    if (os.platform() === 'win32') {
+    if (os.platform() === "win32") {
       if (this.config.win32 === undefined) {
-        this.config.win32 = <IWindowsConfig>{};
+        this.config.win32 = {} as IWindowsConfig;
       }
       ObjectTools.CopyEachSource(this.config.win32, config);
-    } else if (os.platform() === 'linux') {
+    } else if (os.platform() === "linux") {
       if (this.config.linux === undefined) {
-        this.config.linux = <ILinuxConfig>{};
+        this.config.linux = {} as ILinuxConfig;
       }
       ObjectTools.CopyEachSource(this.config.linux, config);
     } else {
@@ -110,16 +110,16 @@ export class ConfigManager {
     }
   }
 
-  getRuntimeConfig(mode: InstallMode): IAppConfig {
+  getRuntimeConfig(mode: InstallMode | undefined): IAppConfig | undefined {
     if (mode === InstallMode.app) {
       return this.getPlatformConfig<IPlatformConfig>().app;
     } else {
-      return this.config.linux.systemd;
+      return this.config.linux?.systemd;
     }
   }
 
   getPlatformConfig<T extends IPlatformConfig>(): T {
-    const result = (<any>this.config)[os.platform()];
+    const result = (this.config as any)[os.platform()];
 
     if (result === undefined) {
       shelly.echoYellow(JSON.stringify(this.config, undefined, 2));

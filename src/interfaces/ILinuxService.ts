@@ -1,4 +1,4 @@
-import { IAppConfig } from './IAppConfig';
+import { IAppConfig } from "./IAppConfig";
 
 export interface ILinuxService extends IAppConfig {
   Description: string;

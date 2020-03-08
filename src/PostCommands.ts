@@ -1,7 +1,7 @@
-import { replacePath, ObjectTools } from 'dotup-ts-types';
-import { ConfigManager } from './ConfigManager';
-import { shelly } from './Shelly';
-import _ from 'lodash';
+import { replacePath, ObjectTools } from "@dotup/dotup-ts-types";
+import { ConfigManager } from "./ConfigManager";
+import { shelly } from "./Shelly";
+// import _ from 'lodash';
 
 export class PostCommands {
   private readonly cm: ConfigManager;
@@ -21,7 +21,7 @@ export class PostCommands {
       return;
     }
 
-    shelly.echoGreen('Executing post commands');
+    shelly.echoGreen("Executing post commands");
 
     const commands = runtime.postCommands;
     commands.forEach(command => {

@@ -1,17 +1,17 @@
 #!/usr/bin/env node
 
-import commander from 'commander';
-import path from 'path';
-import { Configurator } from './Configurator';
-import { InstallMode } from './Enumerations';
-import { LinuxService } from './LinuxService';
-import { PackageJsonReader } from './PackageJsonReader';
-import { shelly } from './Shelly';
-import rimraf = require('rimraf');
-import { PostCommands } from './PostCommands';
-import { IAppConfig } from './interfaces/IAppConfig';
-import { INoinArguments } from './interfaces/INoinArguments';
-import { Environment } from './Environment';
+import commander from "commander";
+import path from "path";
+import { Configurator } from "./Configurator";
+import { InstallMode } from "./Enumerations";
+import { LinuxService } from "./LinuxService";
+import { PackageJsonReader } from "./PackageJsonReader";
+import { shelly } from "./Shelly";
+import rimraf = require("rimraf");
+import { PostCommands } from "./PostCommands";
+import { IAppConfig } from "./interfaces/IAppConfig";
+import { INoinArguments } from "./interfaces/INoinArguments";
+import { Environment } from "./Environment";
 
 export class App extends Configurator {
 
@@ -27,23 +27,23 @@ export class App extends Configurator {
      */
 
     const args = commander
-      .option('-a, --app', 'Install as application', false)
-      .option('-s, --service <servicename>', 'Install as service')
-      .option('-p, --production [true/false]', 'Build and install packages in production mode')
-      .option('-u, --userName <username>', 'Github user name')
-      .option('-r, --repositoryName <repositoryname>', 'Github repository name')
-      .option('-t, --target [targetpath]', 'Target path to install to.')
-      .option('-o, --override [true/false]', 'Override tmp and target folders.')
+      .option("-a, --app", "Install as application", false)
+      .option("-s, --service <servicename>", "Install as service")
+      .option("-p, --production [true/false]", "Build and install packages in production mode")
+      .option("-u, --userName <username>", "Github user name")
+      .option("-r, --repositoryName <repositoryname>", "Github repository name")
+      .option("-t, --target [targetpath]", "Target path to install to.")
+      .option("-o, --override [true/false]", "Override tmp and target folders.")
       .parse(process.argv);
 
     this.rootDir = shelly.pwd().toString();
     shelly.silent(true);
-    const dir = shelly.exec('npm root -g').toString().split('\n')[0];
+    const dir = shelly.exec("npm root -g").toString().split("\n")[0];
     shelly.silent(false);
-    this.noinDir = path.join(dir, 'dotup-node-app-installer', 'dist');
+    this.noinDir = path.join(dir, "dotup-node-app-installer", "dist");
 
     // Get configuration
-    this.loadConfig(this.rootDir, <Partial<INoinArguments>>args);
+    this.loadConfig(this.rootDir, args as Partial<INoinArguments>);
   }
 
   async install(): Promise<void> {
@@ -70,7 +70,7 @@ export class App extends Configurator {
     runtimeConfig.bin = preader.getBin(runtimeConfig.targetPath);
 
     // Install dependencies and Build project
-    this.build();
+    this.build(this.config.InstallScript, this.config.BuildScript);
 
     // Copy project to target and install dependencies
     await this.createTarget(preader, mode);
@@ -78,7 +78,10 @@ export class App extends Configurator {
     // Create dotenv file
     const env = new Environment();
     const platformConfig = this.cm.getPlatformConfig();
-    env.createFile(path.join(platformConfig.targetPath, '.env'), this.cm.getRuntimeConfig(mode));
+    env.createFile(
+      path.join(platformConfig.targetPath, ".env"),
+      this.cm.getRuntimeConfig(mode)
+    );
 
     // Install service
     if (this.cm.canInstallService(mode)) {
@@ -95,7 +98,7 @@ export class App extends Configurator {
     commands.execute();
 
     // Done
-    shelly.echoGreen('Installation completed');
+    shelly.echoGreen("Installation completed");
   }
 
   async clone(): Promise<void> {
@@ -111,22 +114,25 @@ export class App extends Configurator {
       shelly.exec(`git clone --depth 1 ${this.config.git.url}`);
     } else {
       shelly.echoRed(`Repository folder '${this.repositoryDir}' already exists`);
-      throw new Error('Clone failed');
+      throw new Error("Clone failed");
     }
 
   }
 
-  build(): void {
+  build(installScript?: string, buildScript?: string): void {
     // cd into repository
     shelly.cd(this.repositoryDir);
 
     // Install packages
-    shelly.echoGreen('Installing dependencies');
-    shelly.exec(`npm install`);
+    shelly.echoGreen("Installing dependencies");
+    const installCommand = installScript ? installScript : "npm install";
+    shelly.exec(installCommand);
 
     // Build project
-    shelly.echoGreen('Building project');
-    shelly.exec(`gulp project-build`);
+    shelly.echoGreen("Building project");
+    const buildCommand = buildScript ? buildScript : "gulp project-build";
+    shelly.exec(buildCommand);
+
   }
 
   // TODO: Refactor
@@ -134,13 +140,13 @@ export class App extends Configurator {
     const platformConfig = this.cm.getPlatformConfig();
 
     // copy to target
-    shelly.echoGreen('Copy binaries to target');
+    shelly.echoGreen("Copy binaries to target");
     let source = path.join(preader.getPathToExec(this.repositoryDir));
     shelly.echoGrey(`Source '${source}'`);
     shelly.echoGrey(`Target '${platformConfig.targetPath}'`);
     shelly.cp(source, platformConfig.targetPath);
 
-    source = path.join(this.repositoryDir, 'package.json');
+    source = path.join(this.repositoryDir, "package.json");
     shelly.cp(source, platformConfig.targetPath);
 
     // cd into target path
@@ -148,8 +154,8 @@ export class App extends Configurator {
 
     // Install packages
     const isProduction = await this.getIsProduction();
-    const installProd = isProduction ? '--production' : '';
-    shelly.echoGreen('Installing dependencies');
+    const installProd = isProduction ? "--production" : "";
+    shelly.echoGreen("Installing dependencies");
     shelly.exec(`npm install ${installProd}`);
   }
 
@@ -158,6 +164,10 @@ export class App extends Configurator {
     const runtimeConfig = this.cm.getPlatformConfig();
     const serviceConfig = this.cm.getServiceConfig();
 
+    if (serviceConfig === undefined) {
+      throw new Error("serviceConfig === undefined");
+    }
+
     const serviceName = serviceConfig.serviceName;
     const targetPath = runtimeConfig.targetPath;
 
@@ -165,11 +175,11 @@ export class App extends Configurator {
       serviceConfig.ExecStart === undefined ||
       serviceConfig.WorkingDirectory === undefined
     ) {
-      const node = shelly.which('node');
+      const node = shelly.which("node");
       const bin = preader.getBin(targetPath);
       let exec = `${node}`;
       if (env.filePath !== undefined) {
-        exec = `${exec} -r dotenv/config ${bin} dotenv_config_path=${path.join(targetPath, '.env')}`;
+        exec = `${exec} -r dotenv/config ${bin} dotenv_config_path=${path.join(targetPath, ".env")}`;
       } else {
         exec = `${exec} ${bin}`;
       }
@@ -178,7 +188,11 @@ export class App extends Configurator {
     }
 
     const service = await this.getLinuxService();
-    const template = path.join(this.noinDir, 'assets', 'template.service');
+    const template = path.join(this.noinDir, "assets", "template.service");
+
+    if (service === undefined) {
+      throw new Error("service === undefined");
+    }
 
     // Generate service file
     const ls = new LinuxService();

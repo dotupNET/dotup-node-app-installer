@@ -75,7 +75,7 @@ export interface IBugs {
 
 export interface IConfig {
   name?: string;
-  config?: Object;
+  config?: Record<string, any>;
 }
 
 export interface IDependency {

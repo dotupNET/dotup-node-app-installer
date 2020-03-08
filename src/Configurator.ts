@@ -1,17 +1,17 @@
-import fs from 'fs';
-import path from 'path';
-import rimraf from 'rimraf';
-import { ConfigManager } from './ConfigManager';
-import { Enquirer } from './Enquirer';
-import { InstallMode } from './Enumerations';
-import { IGitConfig } from './interfaces/IGitConfig';
-import { ILinuxConfig } from './interfaces/ILinuxConfig';
-import { ILinuxService } from './interfaces/ILinuxService';
-import { ILinuxServiceConfig } from './interfaces/ILinuxServiceConfig';
-import { INoinConfig } from './interfaces/INoinConfig';
-import { shelly } from './Shelly';
-import { INoinArguments } from './interfaces/INoinArguments';
-import { IAppConfig } from './interfaces/IAppConfig';
+import fs from "fs";
+import path from "path";
+import rimraf from "rimraf";
+import { ConfigManager } from "./ConfigManager";
+import { Enquirer } from "./Enquirer";
+import { InstallMode } from "./Enumerations";
+import { IGitConfig } from "./interfaces/IGitConfig";
+import { ILinuxConfig } from "./interfaces/ILinuxConfig";
+import { ILinuxService } from "./interfaces/ILinuxService";
+import { ILinuxServiceConfig } from "./interfaces/ILinuxServiceConfig";
+import { INoinConfig } from "./interfaces/INoinConfig";
+import { shelly } from "./Shelly";
+import { INoinArguments } from "./interfaces/INoinArguments";
+import { IAppConfig } from "./interfaces/IAppConfig";
 
 export class Configurator {
 
@@ -39,7 +39,7 @@ export class Configurator {
       runtime.app = undefined;
       if (runtime.systemd === undefined) {
         // const name = await Enquirer.getServiceName();
-        runtime.systemd = <ILinuxServiceConfig>{};
+        runtime.systemd = {} as ILinuxServiceConfig;
         // runtime.systemd.serviceName = name;
       }
     } else {
@@ -73,19 +73,19 @@ export class Configurator {
     return this.config.git;
   }
 
-  async getLinuxService(): Promise<ILinuxService> {
+  async getLinuxService(): Promise<ILinuxService | undefined> {
     const config = this.cm.getServiceConfig();
-    this.config.linux.systemd = await Enquirer.getLinuxService(config);
+    this.config.linux!.systemd = await Enquirer.getLinuxService(config as ILinuxServiceConfig);
 
-    return this.config.linux.systemd;
+    return this.config.linux?.systemd;
   }
 
-  async getApp(mode: InstallMode): Promise<IAppConfig> {
+  async getApp(mode: InstallMode): Promise<IAppConfig | undefined> {
     const config = this.cm.getRuntimeConfig(mode);
-    const app = await Enquirer.getApp(config);
+    const app = await Enquirer.getApp(config as IAppConfig);
     this.cm.setPlatformConfig({ app: app });
 
-    return this.config.linux.systemd;
+    return this.config.linux?.systemd;
   }
 
   async canClone(): Promise<boolean> {
