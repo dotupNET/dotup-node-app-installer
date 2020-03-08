@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import shell, { ShellString } from "shelljs";
+import * as shell from "shelljs";
 import path from "path";
 
 export namespace shelly {
@@ -28,7 +28,7 @@ export namespace shelly {
     shell.config.silent = value;
   }
 
-  export function run(result: ShellString): ShellString {
+  export function run(result: shell.ShellString): shell.ShellString {
     if (result.code !== 0) {
       echoRed(result.stderr);
       shell.exit(1);
@@ -37,7 +37,7 @@ export namespace shelly {
     return result;
   }
 
-  export function pwd(): ShellString {
+  export function pwd(): shell.ShellString {
     return shell.pwd();
   }
 
@@ -55,7 +55,7 @@ export namespace shelly {
     return cd(shell.tempdir().toString());
   }
 
-  export function which(command: string): ShellString {
+  export function which(command: string): shell.ShellString {
     // Go to temp
     return run(shell.which(command));
   }
@@ -64,21 +64,21 @@ export namespace shelly {
     return shell.tempdir().toString();
   }
 
-  export function rm(dir: string): ShellString {
+  export function rm(dir: string): shell.ShellString {
     return run(shell.rm("-rf", dir));
   }
 
-  export function mkdir(dir: string): ShellString {
+  export function mkdir(dir: string): shell.ShellString {
     return run(shell.mkdir("-p", dir));
   }
 
-  export function cp(source: string, target: string): ShellString {
+  export function cp(source: string, target: string): shell.ShellString {
     run(shell.mkdir("-p", target));
     return run(shell.cp("-R", source, target));
   }
 
 
-  export function exec(cmd: string): ShellString {
+  export function exec(cmd: string): shell.ShellString {
     const result = shell.exec(cmd);
     if (result.code !== 0) {
       echoRed(result.stderr);
