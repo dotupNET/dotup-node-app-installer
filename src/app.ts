@@ -40,7 +40,7 @@ export class App extends Configurator {
     shelly.silent(true);
     const dir = shelly.exec("npm root -g").toString().split("\n")[0];
     shelly.silent(false);
-    this.noinDir = path.join(dir, "dotup-node-app-installer", "dist");
+    this.noinDir = path.join(dir, "@dotup", "node-app-installer", "dist");
 
     // Get configuration
     this.loadConfig(this.rootDir, args as Partial<INoinArguments>);
