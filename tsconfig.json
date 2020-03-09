@@ -9,6 +9,7 @@
   ],
   "compilerOptions": {
     "target": "es2017",
+    "esModuleInterop": true,
     "outDir": "dist",
     "rootDir": "src"
   }

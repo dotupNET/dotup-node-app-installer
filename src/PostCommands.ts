@@ -1,6 +1,7 @@
 import { replacePath, ObjectTools } from "@dotup/dotup-ts-types";
 import { ConfigManager } from "./ConfigManager";
 import { shelly } from "./Shelly";
+import { InstallMode } from "./Enumerations";
 // import _ from 'lodash';
 
 export class PostCommands {
@@ -11,7 +12,7 @@ export class PostCommands {
   }
 
   execute(): void {
-    const mode = this.cm.getInstallMode();
+    const mode = InstallMode.service;
     const platform = this.cm.getPlatformConfig();
     const runtime = this.cm.getRuntimeConfig(mode);
 

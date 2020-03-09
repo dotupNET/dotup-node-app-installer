@@ -1,7 +1,7 @@
 {
-  "version": "1.0.4",
-  "name": "@dotup/node-app-installer",
-  "description": "Installer for node js applications. Install as app or service on linux.",
+  "version": "2.0.1",
+  "name": "@dotup/node-service-installer",
+  "description": "Installer for node js services. Install an app as service on linux.",
   "scripts": {
     "build": "npm run build-ts",
     "build-ts": "npm run lint && npm run clean-dist && tsc -p tsconfig.build.json && npm run copy-static-assets",
@@ -45,10 +45,7 @@
     "@dotup/dotup-ts-types": "1.1.1",
     "chalk": "^3.0.0",
     "commander": "^4.1.1",
-    "dotup-ts-git-wrapper": "^1.0.0",
     "ejs": "^3.0.1",
-    "enquirer": "^2.3.4",
-    "rimraf": "^3.0.2",
     "shelljs": "^0.8.3"
   },
   "devDependencies": {
@@ -68,20 +65,11 @@
     "del": "^5.1.0",
     "eslint": "^6.8.0",
     "gh-pages": "^2.2.0",
-    "gulp": "^4.0.2",
-    "gulp-eslint": "6.0.0",
-    "gulp-gh-pages": "^0.5.4",
-    "gulp-mocha": "^7.0.2",
-    "gulp-sourcemaps": "^2.6.5",
-    "gulp-typedoc": "^2.2.4",
-    "gulp-typescript": "^5.0.1",
     "mocha": "^7.1.0",
+    "rimraf": "^3.0.2",
     "ts-node": "^8.6.2",
     "typedoc": "^0.16.11",
     "typescript": "^3.8.3"
-  },
-  "peerDependencies": {
-    "pnpm": "4.11.4"
   },
   "author": {
     "name": "Peter Ullrich",
@@ -94,17 +82,17 @@
   "main": "dist/app.js",
   "types": "dist/app.d.ts",
   "bin": {
-    "noin": "dist/app.js"
+    "nosi": "dist/app.js"
   },
   "engines": {
     "node": ">= 0.10"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dotupNET/dotup-node-app-installer.git"
+    "url": "git+https://github.com/dotupNET/dotup-node-service-installer.git"
   },
   "bugs": {
-    "url": "https://github.com/dotupNET/dotup-node-app-installer/issues"
+    "url": "https://github.com/dotupNET/dotup-node-service-installer/issues"
   },
-  "homepage": "https://github.com/dotupNET/dotup-node-app-installer#readme"
+  "homepage": "https://github.com/dotupNET/dotup-node-service-installer#readme"
 }
